@@ -29,6 +29,10 @@ def _browser_repo_impl(ctx):
             sha256 = sha256,
         )
 
+    named_files_label_dict = {}
+    for name, value in ctx.attr.named_files.items():
+        named_files_label_dict[":%s" % value] = name
+
     # The browser archive has been downloaded and extracted. We now generate a repository
     # `BUILD.bazel` file that exposes the archive files, together with the specified
     # named files using the `browser_artifact` rule.
@@ -48,7 +52,7 @@ exports_files(%s)
 """ % (
         str(ctx.attr.licenses),
         str(ctx.attr.exclude_patterns),
-        str(ctx.attr.named_files),
+        str(named_files_label_dict),
         str(ctx.attr.exports_files),
     ))
 

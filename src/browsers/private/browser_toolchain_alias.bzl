@@ -4,15 +4,10 @@ def _browser_toolchain_alias_impl(ctx):
     template_variables = {}
 
     for dep in ctx.attr.deps:
-        base_path = dep.label.workspace_name
         named_files = dep[NamedFilesInfo].value
 
         for key, value in named_files.items():
-            # We explicitly include the workspace name in the rootpath, so we need
-            # follow the `../<workspace_name>/<path>` pattern. This matches what the
-            # Bazel location expansion would generate for `$(rootpath <external_file>)`.
-            # https://docs.bazel.build/versions/main/be/make-variables.html#predefined_label_variables.
-            template_variables[key] = "../%s/%s" % (base_path, value)
+            template_variables[key] = value.path
 
     return [
         platform_common.TemplateVariableInfo(template_variables),

@@ -5,25 +5,20 @@ NamedFilesInfo = provider(
     },
 )
 
-def _label_to_manifest_path(label):
-    """Converts the specified label to a manifest path"""
-    if label.package != "":
-        return "%s/%s" % (label.workspace_name, label.package)
-    return label.workspace_name
-
 def _browser_artifact_impl(ctx):
     """Implementation of the `browser_artifact` rule."""
     named_files = {}
-    base_dir = _label_to_manifest_path(ctx.label)
 
-    # Update the named files to manifest paths that can be resolved
-    # with Bazel runfiles resolution in web tests.
-    for n, p in ctx.attr.named_files.items():
-        named_files[n] = base_dir + "/" + p
+    # Reorder the label keyed dict so that the artifact names are the keys.
+    for file, name in ctx.attr.named_files.items():
+        named_files[name] = file[DefaultInfo].files.to_list()[0]
 
     return [
-        DefaultInfo(runfiles = ctx.runfiles(files = ctx.files.files)),
-        NamedFilesInfo(value = ctx.attr.named_files),
+        DefaultInfo(
+            files = depset(ctx.files.files),
+            runfiles = ctx.runfiles(files = ctx.files.files),
+        ),
+        NamedFilesInfo(value = named_files),
     ]
 
 _DOC = """
@@ -47,13 +42,14 @@ browser_artifact = rule(
             allow_files = True,
             doc = "List of files which are needed for the browser.",
         ),
-        "named_files": attr.string_dict(
+        "named_files": attr.label_keyed_string_dict(
             doc = """
               Dictionary that maps files to unique identifiers. This is useful
               if browser archives are different on different platforms and the web
               tests would not want to care about archive-specific paths. e.g. targets
               expect a `CHROMIUM` key to point to the Chromium browser binary.
             """,
+            allow_files = True,
             mandatory = True,
         ),
     },

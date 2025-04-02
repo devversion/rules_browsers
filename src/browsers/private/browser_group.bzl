@@ -2,16 +2,16 @@ load("@rules_browsers//src/browsers/private:browser_artifact.bzl", "NamedFilesIn
 
 def _browser_group_impl(ctx):
     named_files = {}
-    file_depsets = []
+    runfiles = []
 
     for dep in ctx.attr.deps:
-        file_depsets.append(dep[DefaultInfo].files)
+        runfiles.append(dep[DefaultInfo].default_runfiles)
 
-        for key, value in dep[NamedFilesInfo]:
+        for key, value in dep[NamedFilesInfo].value.items():
             named_files[key] = value
 
     return [
-        DefaultInfo(files = depset([], transitive = file_depsets)),
+        DefaultInfo(runfiles = ctx.runfiles().merge_all(runfiles)),
         NamedFilesInfo(value = named_files),
     ]
 
