@@ -1,6 +1,6 @@
 load("@npm_rules_browsers//:@web/test-runner/package_json.bzl", wtr = "bin")
 
-def _base_wtr_test(name, mode, deps, tags = []):
+def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     is_firefox = mode == "firefox"
     is_chromium = mode == "chromium"
 
@@ -19,7 +19,7 @@ def _base_wtr_test(name, mode, deps, tags = []):
         env = {"CHROMIUM_BIN": "$(CHROMIUM)"}
     else:
         env = {"MANUAL_MODE": "1"}
-        extra_tags = ["requires-network"]
+        extra_tags = ["requires-network", "manual"]
 
     wtr.wtr_test(
         name = name,
@@ -42,6 +42,7 @@ def _base_wtr_test(name, mode, deps, tags = []):
             "%s/**/*_spec.mjs" % native.package_name(),
             "%s/**/*_spec.cjs" % native.package_name(),
         ],
+        **kwargs
     )
 
 def wtr_test(name, deps, **kwargs):
