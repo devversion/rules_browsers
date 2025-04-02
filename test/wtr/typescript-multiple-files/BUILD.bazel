@@ -1,0 +1,14 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("//src/wtr:index.bzl", "wtr_test")
+
+ts_project(
+    name = "test_lib",
+    srcs = glob(["**/*.mts"]),
+    tsconfig = "tsconfig.json",
+    deps = ["//:node_modules/@types/jasmine"],
+)
+
+wtr_test(
+    name = "test",
+    deps = [":test_lib"],
+)
