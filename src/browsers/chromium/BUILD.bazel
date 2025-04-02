@@ -1,0 +1,27 @@
+load("//src/browsers/private:browser_group.bzl", "browser_group")
+load("//src/browsers/private:browser_toolchain_alias.bzl", "browser_toolchain_alias")
+
+package(default_visibility = ["//visibility:public"])
+
+browser_group(
+    name = "chromium",
+    deps = select({
+        "//src/browsers/private:linux_x64": [
+            "@org_chromium_chromedriver_linux_x64//:info",
+            "@org_chromium_chromium_linux_x64//:info",
+        ],
+        "//src/browsers/private:macos_x64": [
+            "@org_chromium_chromedriver_macos_x64//:info",
+            "@org_chromium_chromium_macos_x64//:info",
+        ],
+        "//src/browsers/private:macos_arm64": [
+            "@org_chromium_chromedriver_macos_arm64//:info",
+            "@org_chromium_chromium_macos_arm64//:info",
+        ],
+    }),
+)
+
+browser_toolchain_alias(
+    name = "toolchain_alias",
+    deps = [":chromium"],
+)
