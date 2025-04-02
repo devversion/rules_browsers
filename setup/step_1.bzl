@@ -5,8 +5,9 @@ def rules_browsers_setup_1():
     npm_translate_lock(
         name = "npm_rules_browsers",
         data = [
-            "//:package.json",
-            "//:pnpm-workspace.yaml",
+            "@rules_browsers//:package.json",
+            "@rules_browsers//:pnpm-workspace.yaml",
+            "@rules_browsers//:patches/@web__config-loader.patch",
         ],
         npmrc = "//:.npmrc",
         pnpm_lock = "//:pnpm-lock.yaml",
