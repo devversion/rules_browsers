@@ -39,8 +39,6 @@ def _browser_repo_impl(ctx):
     ctx.file("BUILD.bazel", content = """
 load("@rules_browsers//src/browsers/private:browser_artifact.bzl", "browser_artifact")
 
-licenses(%s)
-
 browser_artifact(
   name = "info",
   files = glob(["**/*"], exclude = %s),
@@ -50,7 +48,6 @@ browser_artifact(
 
 exports_files(%s)
 """ % (
-        str(ctx.attr.licenses),
         str(ctx.attr.exclude_patterns),
         str(named_files_label_dict),
         str(ctx.attr.exports_files),
@@ -92,14 +89,6 @@ browser_repo = repository_rule(
         "sha256": attr.string(
             doc = "SHA256 checksum for the archive.",
             mandatory = True,
-        ),
-        "licenses": attr.string_list(
-            mandatory = True,
-            allow_empty = False,
-            doc = """
-              Licenses that apply to the archive. Will be passed to a `licenses` invocation
-              within the repository. https://docs.bazel.build/versions/0.24.0/be/functions.html#licenses.
-            """,
         ),
         "named_files": attr.string_dict(
             doc = """

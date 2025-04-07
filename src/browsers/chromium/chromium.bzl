@@ -1,106 +1,62 @@
-"""
-  Defines repositories for Chromium that can be used inside Karma unit tests
-  and Protractor e2e tests with Bazel.
-"""
-
 load("@rules_browsers//src/browsers/private:browser_repo.bzl", "browser_repo")
 
 def define_chromium_repositories():
-    # To update to a newer version of Chromium see instructions in
-    # https://github.com/angular/dev-infra/blob/master/bazel/browsers/README.md.
-
     browser_repo(
-        name = "org_chromium_chromium_linux_x64",
-        licenses = ["notice"],  # BSD 3-clause (maybe more?)
-        sha256 = "e45b0439b7f69e0e885d6cae9535a9f1e5f0c206fd619044288e9a53e8a004c7",
-        # 114.0.5673.0
-        urls = [
-            "https://storage.googleapis.com/chromium-browser-snapshots/Linux_x64/1263141/chrome-linux.zip",
-            "https://storage.googleapis.com/dev-infra-mirror/chromium/1263141/linux_x64/browser-bin.zip",
-        ],
-        named_files = {
-            "CHROMIUM": "chrome-linux/chrome",
-        },
-        exclude_patterns = [
-            # Exclude a log file that chromium writes to each run, causing remote cache misses.
-            "chrome-linux/chrome_debug.log",
-        ],
-        exports_files = ["chrome-linux"],
+        name = "rules_browsers_chromium_mac_x64",
+        sha256 = "9a88fb96bbe89d5d0af4d71b168d3441d2ebb43ecf579618e5c53cb79584a3b2",
+        urls = ["https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1161/chromium-mac.zip", "https://playwright.download.prss.microsoft.com/dbazure/download/playwright/builds/chromium/1161/chromium-mac.zip", "https://cdn.playwright.dev/builds/chromium/1161/chromium-mac.zip"],
+        named_files = {"CHROMIUM": "chrome-mac/Chromium.app/Contents/MacOS/Chromium"},
+        exclude_patterns = ["chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log"],
+        exports_files = ["chrome-mac/Chromium.app/Contents/MacOS/Chromium"],
     )
 
     browser_repo(
-        name = "org_chromium_chromium_macos_x64",
-        licenses = ["notice"],  # BSD 3-clause (maybe more?)
-        sha256 = "c18ba7a79fda6bc82229fd9ff685ff0d7b41ab32845b7fb989daecd8a2b10a00",
-        # 114.0.5673.0
-        urls = [
-            "https://storage.googleapis.com/chromium-browser-snapshots/Mac/1263141/chrome-mac.zip",
-            "https://storage.googleapis.com/dev-infra-mirror/chromium/1263141/mac_x64/browser-bin.zip",
-        ],
-        named_files = {
-            "CHROMIUM": "chrome-mac/Chromium.app/Contents/MacOS/Chromium",
-        },
-        exclude_patterns = [
-            # Exclude a log file that chromium writes to each run, causing remote cache misses.
-            "chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log",
-        ],
-        exports_files = ["chrome-mac"],
+        name = "rules_browsers_chromium_mac_arm",
+        sha256 = "8ad59288a14ad2a74b8279376f6b00a2224a77537517c61e62e34e08f214ecaa",
+        urls = ["https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1161/chromium-mac-arm64.zip", "https://playwright.download.prss.microsoft.com/dbazure/download/playwright/builds/chromium/1161/chromium-mac-arm64.zip", "https://cdn.playwright.dev/builds/chromium/1161/chromium-mac-arm64.zip"],
+        named_files = {"CHROMIUM": "chrome-mac/Chromium.app/Contents/MacOS/Chromium"},
+        exclude_patterns = ["chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log"],
+        exports_files = ["chrome-mac/Chromium.app/Contents/MacOS/Chromium"],
     )
 
     browser_repo(
-        name = "org_chromium_chromium_macos_arm64",
-        licenses = ["notice"],  # BSD 3-clause (maybe more?)
-        sha256 = "2debe4e82002cd898a7573a1e132fafd2cb21a5af70c811fda50ebe9abe37d08",
-        # 114.0.5673.0
-        urls = [
-            "https://storage.googleapis.com/chromium-browser-snapshots/Mac_Arm/1263141/chrome-mac.zip",
-            "https://storage.googleapis.com/dev-infra-mirror/chromium/1263141/mac_arm64/browser-bin.zip",
-        ],
-        named_files = {
-            "CHROMIUM": "chrome-mac/Chromium.app/Contents/MacOS/Chromium",
-        },
-        exclude_patterns = [
-            # Exclude a log file that chromium writes to each run, causing remote cache misses.
-            "chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log",
-        ],
-        exports_files = ["chrome-mac"],
+        name = "rules_browsers_chromium_linux_x64",
+        sha256 = "25db802cce762a2c5c082b115671b8c37f8ef87c2d08e367d216d56e955e2496",
+        urls = ["https://cdn.playwright.dev/dbazure/download/playwright/builds/chromium/1161/chromium-linux.zip", "https://playwright.download.prss.microsoft.com/dbazure/download/playwright/builds/chromium/1161/chromium-linux.zip", "https://cdn.playwright.dev/builds/chromium/1161/chromium-linux.zip"],
+        named_files = {"CHROMIUM": "chrome-linux/chrome"},
+        exclude_patterns = ["chrome-linux/chrome_debug.log"],
+        exports_files = ["chrome-linux/chrome"],
     )
 
     browser_repo(
-        name = "org_chromium_chromedriver_linux_x64",
-        licenses = ["reciprocal"],  # BSD 3-clause, ICU, MPL 1.1, libpng (BSD/MIT-like), Academic Free License v. 2.0, BSD 2-clause, MIT
-        sha256 = "3bd1ed0fee4153ab78eb61109c73657a965f6eabbbba8d0895626967b068beaa",
+        name = "rules_browsers_chromedriver_linux_x64",
+        sha256 = "b820be8f77e9b03eda7c68ee85263f58109b631f8e12e6e5d4fb580aeb1578dc",
         urls = [
-            "https://storage.googleapis.com/chromium-browser-snapshots/Linux_x64/1263141/chromedriver_linux64.zip",
-            "https://storage.googleapis.com/dev-infra-mirror/chromium/1263141/linux_x64/driver-bin.zip",
+            "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.35/linux64/chromedriver-linux64.zip",
         ],
         named_files = {
-            "CHROMEDRIVER": "chromedriver_linux64/chromedriver",
+            "CHROMEDRIVER": "chromedriver-linux64/chromedriver",
         },
     )
 
     browser_repo(
-        name = "org_chromium_chromedriver_macos_x64",
-        licenses = ["reciprocal"],  # BSD 3-clause, ICU, MPL 1.1, libpng (BSD/MIT-like), Academic Free License v. 2.0, BSD 2-clause, MIT
-        sha256 = "1a08bdfb06bd395caafbbb5fe9be982edf5c3c5d07e8082b06f0cf416389a5af",
+        name = "rules_browsers_chromedriver_macos_x64",
+        sha256 = "c7110fda39d2f1fea7d7471742a4078fa3f97c54415c410e57afb1c97c8fc93c",
         urls = [
-            "https://storage.googleapis.com/chromium-browser-snapshots/Mac/1263141/chromedriver_mac64.zip",
-            "https://storage.googleapis.com/dev-infra-mirror/chromium/1263141/mac_x64/driver-bin.zip",
+            "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.35/mac-x64/chromedriver-mac-x64.zip",
         ],
         named_files = {
-            "CHROMEDRIVER": "chromedriver_mac64/chromedriver",
+            "CHROMEDRIVER": "chromedriver-mac-x64/chromedriver",
         },
     )
 
     browser_repo(
-        name = "org_chromium_chromedriver_macos_arm64",
-        licenses = ["reciprocal"],  # BSD 3-clause, ICU, MPL 1.1, libpng (BSD/MIT-like), Academic Free License v. 2.0, BSD 2-clause, MIT
-        sha256 = "0548bc04cd7d3a9016002034bc30b1df18283612fe99bb7cf1811a60258d60a0",
+        name = "rules_browsers_chromedriver_macos_arm64",
+        sha256 = "561e5082d6763293b15cd3366efaca191ddce96878526388ccfb47d5a8ddc6d7",
         urls = [
-            "https://storage.googleapis.com/chromium-browser-snapshots/Mac_Arm/1263141/chromedriver_mac64.zip",
-            "https://storage.googleapis.com/dev-infra-mirror/chromium/1263141/mac_arm64/driver-bin.zip",
+            "https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.35/mac-arm64/chromedriver-mac-arm64.zip",
         ],
         named_files = {
-            "CHROMEDRIVER": "chromedriver_mac64/chromedriver",
+            "CHROMEDRIVER": "chromedriver-mac-arm64/chromedriver",
         },
     )

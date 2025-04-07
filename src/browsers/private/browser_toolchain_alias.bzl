@@ -7,7 +7,7 @@ def _browser_toolchain_alias_impl(ctx):
         named_files = dep[NamedFilesInfo].value
 
         for key, value in named_files.items():
-            template_variables[key] = value.path
+            template_variables[key] = value.short_path
 
     return [
         platform_common.TemplateVariableInfo(template_variables),

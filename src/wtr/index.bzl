@@ -25,9 +25,11 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         name = name,
         data = browser_deps + deps + [
             "@rules_browsers//:node_modules/@web/test-runner-core",
-            "@rules_browsers//:node_modules/@web/test-runner-puppeteer",
+            "@rules_browsers//:node_modules/@web/test-runner-playwright",
             "@rules_browsers//:node_modules/get-port",
-            "@rules_browsers//:node_modules/web-test-runner-jasmine",
+            "@rules_browsers//:node_modules/wtr-jasmine",
+            "@rules_browsers//:node_modules/@web/dev-server-rollup",
+            "@rules_browsers//:node_modules/@rollup/plugin-virtual",
             "@rules_browsers//src/wtr:wtr_config",
         ],
         tags = tags + extra_tags,

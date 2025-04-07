@@ -1,0 +1,22 @@
+load("@aspect_rules_js//js:defs.bzl", "js_binary")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+
+ts_project(
+    name = "update_tool_lib",
+    srcs = glob([
+        "**/*.ts",
+        "**/*.mts",
+    ]),
+    tsconfig = "tsconfig.json",
+    deps = [
+        "//:node_modules/@types/node",
+        "//:node_modules/piscina",
+        "//:node_modules/playwright-core",
+    ],
+)
+
+js_binary(
+    name = "update-tool",
+    data = [":update_tool_lib"],
+    entry_point = ":index.mjs",
+)

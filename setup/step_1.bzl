@@ -7,11 +7,11 @@ def rules_browsers_setup_1():
         data = [
             "@rules_browsers//:package.json",
             "@rules_browsers//:pnpm-workspace.yaml",
-            "@rules_browsers//:patches/@web__config-loader.patch",
+            "@rules_browsers//:patches/web-test-runner-jasmine-0.0.7.tgz",
         ],
-        npmrc = "//:.npmrc",
-        pnpm_lock = "//:pnpm-lock.yaml",
-        verify_node_modules_ignored = "//:.bazelignore",
+        npmrc = "@rules_browsers//:.npmrc",
+        pnpm_lock = "@rules_browsers//:pnpm-lock.yaml",
+        verify_node_modules_ignored = "@rules_browsers//:.bazelignore",
     )
 
     rules_browsers_repositories()
