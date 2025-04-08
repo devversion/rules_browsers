@@ -7,7 +7,7 @@ def rules_browsers_setup_1():
         data = [
             "@rules_browsers//:package.json",
             "@rules_browsers//:pnpm-workspace.yaml",
-            "@rules_browsers//:patches/web-test-runner-jasmine-0.0.7.tgz",
+            "@rules_browsers//:patches/@web__test-runner-chrome@0.18.0.patch",
         ],
         npmrc = "@rules_browsers//:.npmrc",
         pnpm_lock = "@rules_browsers//:pnpm-lock.yaml",

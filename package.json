@@ -28,6 +28,9 @@
     "@web/test-runner-core": "^0.13.4",
     "@web/test-runner-playwright": "^0.11.0",
     "get-port": "^7.1.0",
+    "karma": "^6.4.4",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-firefox-launcher": "^2.1.3",
     "web-test-runner-jasmine": "0.1.0"
   },
   "pnpm": {
@@ -37,7 +40,9 @@
       "puppeteer-core": "24.6.0"
     },
     "patchedDependencies": {
-      "@puppeteer/browsers@2.9.0": "patches/@puppeteer__browsers@2.9.0.patch"
+      "@puppeteer/browsers@2.9.0": "patches/@puppeteer__browsers@2.9.0.patch",
+      "@web/test-runner-core@0.13.4": "patches/@web__test-runner-core.patch",
+      "@web/test-runner-chrome@0.18.0": "patches/@web__test-runner-chrome@0.18.0.patch"
     }
   }
 }

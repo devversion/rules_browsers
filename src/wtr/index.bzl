@@ -10,7 +10,12 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         "CI": "1",
         "FORCE_COLOR": "1",
     }
-    extra_tags = []
+
+    # Sandbox is very slow, and it seems like modern browsers end up being
+    # much stricter at this point. Back with Karma it was possible to run with
+    # sandbox, but with a proper runfiles directory the risk here is low, and
+    # it also solves some launch problems where e.g. Firefox access `HOME`.
+    extra_tags = ["no-sandbox"]
 
     if is_firefox:
         browser_deps.append("@rules_browsers//src/browsers/firefox")
@@ -22,7 +27,7 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         env = {"CHROMIUM_BIN": "$(CHROME)"}
     else:
         env = {"MANUAL_MODE": "1"}
-        extra_tags = ["requires-network", "manual"]
+        extra_tags += ["requires-network", "manual"]
 
     wtr.wtr_test(
         name = name,

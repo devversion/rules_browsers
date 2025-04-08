@@ -1,0 +1,47 @@
+diff --git a/dist/ChromeLauncherPage.js b/dist/ChromeLauncherPage.js
+index 01c4231ec3204668c682fa125f0ee39f32464e2c..dbc4e5a24f15361222f93698753e30d791ed6ab9 100644
+--- a/dist/ChromeLauncherPage.js
++++ b/dist/ChromeLauncherPage.js
+@@ -27,42 +27,6 @@ class ChromeLauncherPage {
+                 includeRawScriptCoverage: true,
+             });
+         }
+-        // Patching the browser page to workaround an issue in the new headless mode of Chrome where some functions
+-        // with callbacks (requestAnimationFrame and requestIdleCallback) are not executing their callbacks.
+-        // https://github.com/puppeteer/puppeteer/issues/10350
+-        if (!this.patchAdded) {
+-            await this.puppeteerPage.exposeFunction('__bringTabToFront', (id) => {
+-                const promise = new Promise(resolve => {
+-                    this.resolvers[id] = resolve;
+-                });
+-                return mutex.runExclusive(async () => {
+-                    await this.puppeteerPage.bringToFront();
+-                    await promise;
+-                });
+-            });
+-            await this.puppeteerPage.exposeFunction('__releaseLock', (id) => {
+-                var _a, _b;
+-                (_b = (_a = this.resolvers)[id]) === null || _b === void 0 ? void 0 : _b.call(_a);
+-            });
+-            await this.puppeteerPage.evaluateOnNewDocument(() => {
+-                // eslint-disable-next-line @typescript-eslint/ban-types
+-                function patchFunction(name, fn) {
+-                    window[name] = (...args) => {
+-                        const result = fn.call(window, ...args);
+-                        const id = Math.random().toString().substring(2);
+-                        // Make sure that the tab running the test code is brought back to the front.
+-                        window.__bringTabToFront(id);
+-                        fn.call(window, () => {
+-                            window.__releaseLock(id);
+-                        });
+-                        return result;
+-                    };
+-                }
+-                patchFunction('requestAnimationFrame', window.requestAnimationFrame);
+-                patchFunction('requestIdleCallback', window.requestIdleCallback);
+-            });
+-            this.patchAdded = true;
+-        }
+         await this.puppeteerPage.setViewport({ height: 600, width: 800 });
+         await this.puppeteerPage.goto(url);
+     }
