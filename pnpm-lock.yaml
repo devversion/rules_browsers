@@ -26,9 +26,9 @@ importers:
       get-port:
         specifier: ^7.1.0
         version: 7.1.0
-      wtr-jasmine:
-        specifier: ^0.0.7
-        version: 0.0.7
+      web-test-runner-jasmine:
+        specifier: 0.1.0
+        version: 0.1.0
     devDependencies:
       '@types/jasmine':
         specifier: ^5.1.7
@@ -1800,6 +1800,10 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
+  web-test-runner-jasmine@0.1.0:
+    resolution: {integrity: sha512-eJWbxQl7A/dzDlKsdDZdyXCHMo0SWRjkYIpJMvPm6OKqOS83GD7S+M+V5+OE26zra0gDr+bDlO69pfearSbJ+A==}
+    engines: {node: ^22.11.0}
+
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
@@ -1855,10 +1859,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-
-  wtr-jasmine@0.0.7:
-    resolution: {integrity: sha512-i0/ToENrYNPSWZK1NEA5fYb0bBQAnN9LWvnA/2RkOjxlvUEmvexZgki91u53XvTJ3WhkjrCwdsBzgldGn4agyw==}
-    engines: {node: ^22.11.0}
 
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -3698,6 +3698,16 @@ snapshots:
 
   vary@1.1.2: {}
 
+  web-test-runner-jasmine@0.1.0:
+    dependencies:
+      '@web/test-runner': 0.19.0
+      '@web/test-runner-core': 0.13.4
+    transitivePeerDependencies:
+      - bare-buffer
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
   webidl-conversions@7.0.0: {}
 
   whatwg-url@14.2.0:
@@ -3734,16 +3744,6 @@ snapshots:
   ws@7.5.10: {}
 
   ws@8.18.1: {}
-
-  wtr-jasmine@0.0.7:
-    dependencies:
-      '@web/test-runner': 0.19.0
-      '@web/test-runner-core': 0.13.4
-    transitivePeerDependencies:
-      - bare-buffer
-      - bufferutil
-      - supports-color
-      - utf-8-validate
 
   y18n@5.0.8: {}
 

@@ -6,7 +6,10 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
 
     browser_deps = []
     toolchains = []
-    env = {}
+    env = {
+        "CI": "1",
+        "FORCE_COLOR": "1",
+    }
     extra_tags = []
 
     if is_firefox:
@@ -27,7 +30,7 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
             "@rules_browsers//:node_modules/@web/test-runner-core",
             "@rules_browsers//:node_modules/@web/test-runner-playwright",
             "@rules_browsers//:node_modules/get-port",
-            "@rules_browsers//:node_modules/wtr-jasmine",
+            "@rules_browsers//:node_modules/web-test-runner-jasmine",
             "@rules_browsers//:node_modules/@web/dev-server-rollup",
             "@rules_browsers//:node_modules/@rollup/plugin-virtual",
             "@rules_browsers//src/wtr:wtr_config",

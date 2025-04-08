@@ -1,5 +1,5 @@
 import {playwrightLauncher} from '@web/test-runner-playwright';
-import {jasmineTestRunnerConfig} from 'wtr-jasmine';
+import {jasmineTestRunnerConfig} from 'web-test-runner-jasmine';
 import findAvailablePort from 'get-port';
 import {fromRollup} from '@web/dev-server-rollup';
 import rollupVirtual from '@rollup/plugin-virtual';
