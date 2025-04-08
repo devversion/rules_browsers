@@ -1,4 +1,4 @@
-import {Browser} from './browsers.mjs';
+import {Browser} from '@puppeteer/browsers';
 import {BrowserBinaryInfo} from './download.mjs';
 
 export function generateRepositorySetupBzlFile(
@@ -13,7 +13,8 @@ export function generateRepositorySetupBzlFile(
 browser_repo(
     name = "rules_browsers_${binary.browser}_${binary.platform}",
     sha256 = "${binary.sha256}",
-    urls = ${JSON.stringify(binary.urls)},
+    # ${binary.buildId}
+    urls = ["${binary.url}"],
     named_files = ${JSON.stringify(binary.namedFiles)},
     exclude_patterns = ${JSON.stringify(binary.excludeFilesForPerformance)},
     exports_files = ${JSON.stringify(Object.values(binary.namedFiles))},

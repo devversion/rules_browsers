@@ -6,15 +6,27 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
+import {
+  resolveBuildId as resolveChromeBuildId,
+  relativeExecutablePath as relativeChromeExecutablePath,
+} from '@puppeteer/browsers/browser-data/chrome';
+import {
+  FirefoxChannel,
+  resolveBuildId as resolveFirefoxBuildId,
+  relativeExecutablePath as relativeFirefoxExecutablePath,
+} from '@puppeteer/browsers/browser-data/firefox';
+import {
+  Browser,
+  BrowserPlatform,
+  ChromeReleaseChannel,
+} from '@puppeteer/browsers/browser-data/types';
 import {mkdtemp} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import {downloadAndHashBinariesForBrowser, ExecutableForPlatform} from './download.mjs';
+import {downloadAndHashBinariesForBrowser} from './download.mjs';
 import {generateRepositorySetupBzlFile} from './generation.mjs';
 import fs from 'node:fs/promises';
 import {extraChromeBuildFileContent} from './extra_chrome_build_content.mjs';
-import {getDownloadUrlsForPlatform} from './playwright-download-urls.mjs';
-import {Browser, Platform} from './browsers.mjs';
 
 main().catch(e => {
   console.error(e);
@@ -23,51 +35,37 @@ main().catch(e => {
 
 async function main() {
   const tmpDir = await mkdtemp(path.join(os.tmpdir(), 'rules_browsers_tmp-'));
-  const binariesWithPlatform = (
-    await Promise.all([
-      getDownloadUrlsForPlatform(Platform.MAC64, 'darwin'),
-      getDownloadUrlsForPlatform(Platform.MACARM, 'darwin'),
-      getDownloadUrlsForPlatform(Platform.LINUX64, 'linux'),
-    ])
-  ).flat();
 
-  const chromeDownloadBinaries: ExecutableForPlatform[] = [];
-  const firefoxDownloadBinaries: ExecutableForPlatform[] = [];
-
-  for (const binary of binariesWithPlatform) {
-    for (const executable of binary.executables) {
-      if (executable.name === 'chromium') {
-        chromeDownloadBinaries.push({executable, platform: binary.platform});
-      } else if (executable.name === 'firefox') {
-        firefoxDownloadBinaries.push({executable, platform: binary.platform});
-      } else {
-        throw new Error('Unexpected executable.');
-      }
-    }
-  }
+  const [chromeBuildId, firefoxBuildId] = await Promise.all([
+    resolveChromeBuildId(ChromeReleaseChannel.STABLE),
+    resolveFirefoxBuildId(FirefoxChannel.STABLE),
+  ]);
 
   const [chromeBinaries, firefoxBinaries] = await Promise.all([
     downloadAndHashBinariesForBrowser(
       tmpDir,
-      Browser.CHROMIUM,
-      chromeDownloadBinaries,
+      Browser.CHROME,
+      chromeBuildId,
+      platform => relativeChromeExecutablePath(platform, chromeBuildId),
       {},
       {
         // Exclude log files that chromium writes to each run, causing remote cache misses.
-        [Platform.LINUX64]: ['chrome-linux/chrome_debug.log'],
-        [Platform.MAC64]: [
+        [BrowserPlatform.LINUX]: ['chrome-linux/chrome_debug.log'],
+        [BrowserPlatform.MAC]: [
           'chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log',
         ],
-        [Platform.MACARM]: [
+        [BrowserPlatform.MAC_ARM]: [
           'chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log',
         ],
       }
     ),
-    downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxDownloadBinaries),
+    downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxBuildId, platform =>
+      relativeFirefoxExecutablePath(platform, firefoxBuildId)
+    ),
   ]);
 
   const chromeBzl = generateRepositorySetupBzlFile(
-    Browser.CHROMIUM,
+    Browser.CHROME,
     chromeBinaries,
     extraChromeBuildFileContent
   );

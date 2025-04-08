@@ -1,4 +1,4 @@
-import {playwrightLauncher} from '@web/test-runner-playwright';
+import {puppeteerLauncher} from '@web/test-runner-puppeteer';
 import {jasmineTestRunnerConfig} from 'web-test-runner-jasmine';
 import findAvailablePort from 'get-port';
 import {fromRollup} from '@web/dev-server-rollup';
@@ -35,11 +35,11 @@ export default {
     }),
   ],
   browsers: [
-    playwrightLauncher({
+    puppeteerLauncher({
       concurrency: 1,
-      product: firefoxBin ? 'firefox' : 'chromium',
       launchOptions: {
         executablePath: firefoxBin ?? chromiumBin,
+        browser: firefoxBin ? 'firefox' : 'chrome',
         args: chromiumBin
           ? [
               '--no-sandbox',

@@ -8,6 +8,7 @@
 
 import {Readable} from 'node:stream';
 import fs from 'node:fs';
+import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 
 /**
@@ -17,7 +18,7 @@ import {createHash} from 'node:crypto';
  * increasing acquired memory of the NodeJS process unnecessarily.
  */
 export async function downloadFileThroughStreaming(
-  sourceUrl: string,
+  sourceUrl: URL,
   destinationPath: string
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {

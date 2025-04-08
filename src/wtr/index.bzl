@@ -19,7 +19,7 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     elif is_chromium:
         browser_deps.append("@rules_browsers//src/browsers/chromium")
         toolchains.append("@rules_browsers//src/browsers/chromium:toolchain_alias")
-        env = {"CHROMIUM_BIN": "$(CHROMIUM)"}
+        env = {"CHROMIUM_BIN": "$(CHROME)"}
     else:
         env = {"MANUAL_MODE": "1"}
         extra_tags = ["requires-network", "manual"]
@@ -28,7 +28,7 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         name = name,
         data = browser_deps + deps + [
             "@rules_browsers//:node_modules/@web/test-runner-core",
-            "@rules_browsers//:node_modules/@web/test-runner-playwright",
+            "@rules_browsers//:node_modules/@web/test-runner-puppeteer",
             "@rules_browsers//:node_modules/get-port",
             "@rules_browsers//:node_modules/web-test-runner-jasmine",
             "@rules_browsers//:node_modules/@web/dev-server-rollup",

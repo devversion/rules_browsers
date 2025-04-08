@@ -1,0 +1,47 @@
+diff --git a/lib/esm/install.d.ts b/lib/esm/install.d.ts
+index 3bcad4c91764081ac431d73c7448978af11e942e..8608859ab0523f5897cc2c7619b5c426fd2d7fbe 100644
+--- a/lib/esm/install.d.ts
++++ b/lib/esm/install.d.ts
+@@ -5,6 +5,9 @@
+  */
+ import { Browser, BrowserPlatform } from './browser-data/browser-data.js';
+ import { InstalledBrowser } from './Cache.js';
++
++export declare function getDownloadUrl(browser: Browser, platform: BrowserPlatform, buildId: string, baseUrl?: string): URL;
++
+ /**
+  * @public
+  */
+diff --git a/lib/esm/install.js b/lib/esm/install.js
+index 25c2df862da874c27d6bae1cc25d999fb47b81db..3b4ac06d5548e6df90443c0f534ec74d257f75ae 100644
+--- a/lib/esm/install.js
++++ b/lib/esm/install.js
+@@ -241,7 +241,7 @@ export async function canDownload(options) {
+     }
+     return await headHttpRequest(getDownloadUrl(options.browser, options.platform, options.buildId, options.baseUrl));
+ }
+-function getDownloadUrl(browser, platform, buildId, baseUrl) {
++export function getDownloadUrl(browser, platform, buildId, baseUrl) {
+     return new URL(downloadUrls[browser](platform, buildId, baseUrl));
+ }
+ //# sourceMappingURL=install.js.map
+diff --git a/package.json b/package.json
+index 75b5e681eb5be626c6b2faf274d4ff1c9ea9901d..6cd64ceabb94f39292eb74f7796800ef6229b6a2 100644
+--- a/package.json
++++ b/package.json
+@@ -12,10 +12,13 @@
+   "type": "commonjs",
+   "bin": "lib/cjs/main-cli.js",
+   "main": "./lib/cjs/main.js",
+-  "exports": {
++  "exports": {".": {
+     "import": "./lib/esm/main.js",
+     "require": "./lib/cjs/main.js"
+-  },
++  }, "./*": {
++    "types": "./lib/esm/*.d.ts",
++    "import": "./lib/esm/*.js"
++  }},
+   "wireit": {
+     "build": {
+       "command": "tsc -b && node --experimental-strip-types ../../tools/chmod.ts 755 lib/cjs/main-cli.js lib/esm/main-cli.js",
