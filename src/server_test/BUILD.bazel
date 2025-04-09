@@ -1,0 +1,13 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_project(
+    name = "lib",
+    srcs = ["test-runner.mts"],
+    tsconfig = "tsconfig.json",
+    deps = [
+        "@rules_browsers//:node_modules/@types/node",
+        "@rules_browsers//:node_modules/get-port",
+    ],
+)
