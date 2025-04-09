@@ -26,7 +26,7 @@ export default {
   staticLogging: true,
   debug: process.env['DEBUG'] !== undefined,
   manual: manualMode,
-  port: manualMode ? 9876 : await findAvailablePort(),
+  port: await findAvailablePort({port: 9876}),
   plugins: [
     virtual({
       '@web/test-runner-core/browser/session.js': await fs.readFile(
