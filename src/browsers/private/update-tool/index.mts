@@ -7,23 +7,12 @@
  */
 
 import {
-  resolveBuildId as resolveChromeBuildId,
-  relativeExecutablePath as relativeChromeHeadlessExecutablePath,
-} from '@puppeteer/browsers/browser-data/chrome-headless-shell';
-import {
-  FirefoxChannel,
-  resolveBuildId as resolveFirefoxBuildId,
-  relativeExecutablePath as relativeFirefoxExecutablePath,
-} from '@puppeteer/browsers/browser-data/firefox';
-import {
-  resolveBuildId as resolveChromedriverBuild,
-  relativeExecutablePath as relativeChromedriverExecutablePath,
-} from '@puppeteer/browsers/browser-data/chromedriver';
-import {
+  resolveBuildId,
+  computeExecutablePath,
   Browser,
   BrowserPlatform,
-  ChromeReleaseChannel,
-} from '@puppeteer/browsers/browser-data/types';
+  BrowserTag,
+} from '@puppeteer/browsers';
 import {mkdtemp} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -39,10 +28,10 @@ main().catch(e => {
 async function main() {
   const tmpDir = await mkdtemp(path.join(os.tmpdir(), 'rules_browsers_tmp-'));
 
-  const [chromeBuildId, firefoxBuildId, chromedriverBuild] = await Promise.all([
-    resolveChromeBuildId(ChromeReleaseChannel.STABLE),
-    resolveFirefoxBuildId(FirefoxChannel.STABLE),
-    resolveChromedriverBuild(ChromeReleaseChannel.STABLE),
+  const [chromeBuildId, firefoxBuildId, chromedriverBuildId] = await Promise.all([
+    resolveBuildId(Browser.CHROMEHEADLESSSHELL, null!, BrowserTag.STABLE),
+    resolveBuildId(Browser.FIREFOX, null!, BrowserTag.STABLE),
+    resolveBuildId(Browser.CHROMEDRIVER, null!, BrowserTag.STABLE),
   ]);
 
   const [chromeBinaries, chromedriverBinaries, firefoxBinaries] = await Promise.all([
@@ -51,7 +40,6 @@ async function main() {
       // Puppeteer team suggests headless shell as it's more lightweight and faster.
       Browser.CHROMEHEADLESSSHELL,
       chromeBuildId,
-      platform => relativeChromeHeadlessExecutablePath(platform, chromeBuildId),
       {},
       {
         // Exclude log files that Chrome might write to— causing remote cache misses.
@@ -60,12 +48,8 @@ async function main() {
         [BrowserPlatform.MAC_ARM]: ['**/*.log'],
       }
     ),
-    downloadAndHashBinariesForBrowser(tmpDir, Browser.CHROMEDRIVER, chromedriverBuild, platform =>
-      relativeChromedriverExecutablePath(platform, chromedriverBuild)
-    ),
-    downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxBuildId, platform =>
-      relativeFirefoxExecutablePath(platform, firefoxBuildId)
-    ),
+    downloadAndHashBinariesForBrowser(tmpDir, Browser.CHROMEDRIVER, chromedriverBuildId),
+    downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxBuildId),
   ]);
 
   const chromeBzl = generateRepositorySetupBzlFile(Browser.CHROME, chromeBinaries);

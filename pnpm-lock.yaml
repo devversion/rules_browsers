@@ -5,13 +5,10 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  puppeteer: 24.6.0
-  puppeteer-core: 24.6.0
+  puppeteer: 24.6.1
+  puppeteer-core: 24.6.1
 
 patchedDependencies:
-  '@puppeteer/browsers@2.9.0':
-    hash: 7qpxjiyysopaaw65o76hsj7bgq
-    path: patches/@puppeteer__browsers@2.9.0.patch
   '@web/test-runner-chrome@0.18.0':
     hash: sdcmdruhfajls5fgcrmywzbtte
     path: patches/@web__test-runner-chrome@0.18.0.patch
@@ -20,9 +17,18 @@ importers:
 
   .:
     dependencies:
+      '@puppeteer/browsers':
+        specifier: 2.10.0
+        version: 2.10.0
       '@rollup/plugin-virtual':
         specifier: ^3.0.2
         version: 3.0.2(rollup@4.39.0)
+      '@types/jasmine':
+        specifier: ^5.1.7
+        version: 5.1.7
+      '@types/node':
+        specifier: ^22.14.0
+        version: 22.14.0
       '@web/dev-server-rollup':
         specifier: ^0.6.4
         version: 0.6.4
@@ -32,25 +38,12 @@ importers:
       '@web/test-runner-core':
         specifier: ^0.13.4
         version: 0.13.4
-      get-port:
-        specifier: ^7.1.0
-        version: 7.1.0
-      web-test-runner-jasmine:
-        specifier: 0.1.0
-        version: 0.1.0
-    devDependencies:
-      '@puppeteer/browsers':
-        specifier: ^2.9.0
-        version: 2.9.0(patch_hash=7qpxjiyysopaaw65o76hsj7bgq)
-      '@types/jasmine':
-        specifier: ^5.1.7
-        version: 5.1.7
-      '@types/node':
-        specifier: ^22.14.0
-        version: 22.14.0
       '@web/test-runner-puppeteer':
         specifier: ^0.18.0
         version: 0.18.0(typescript@5.8.2)
+      get-port:
+        specifier: ^7.1.0
+        version: 7.1.0
       jasmine:
         specifier: ^5.6.0
         version: 5.6.0
@@ -60,6 +53,9 @@ importers:
       typescript:
         specifier: 5.8.2
         version: 5.8.2
+      web-test-runner-jasmine:
+        specifier: 0.1.0
+        version: 0.1.0
 
 packages:
 
@@ -104,8 +100,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@puppeteer/browsers@2.9.0':
-    resolution: {integrity: sha512-8+xM+cFydYET4X/5/3yZMHs7sjS6c9I6H5I3xJdb6cinzxWUT/I2QVw4avxCQ8QDndwdHkG/FiSZIrCjAbaKvQ==}
+  '@puppeteer/browsers@2.10.0':
+    resolution: {integrity: sha512-HdHF4rny4JCvIcm7V1dpvpctIGqM3/Me255CB44vW7hDG1zYMmcBMjpNqZEDxdCfXGLkx5kP0+Jz5DUS+ukqtA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1297,12 +1293,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  puppeteer-core@24.6.0:
-    resolution: {integrity: sha512-Cukxysy12m0v350bhl/Gzof0XQYmtON9l2VvGp3D4BOQZVgyf+y5wIpcjDZQ/896Okoi95dKRGRV8E6a7SYAQQ==}
+  puppeteer-core@24.6.1:
+    resolution: {integrity: sha512-sMCxsY+OPWO2fecBrhIeCeJbWWXJ6UaN997sTid6whY0YT9XM0RnxEwLeUibluIS5/fRmuxe1efjb5RMBsky7g==}
     engines: {node: '>=18'}
 
-  puppeteer@24.6.0:
-    resolution: {integrity: sha512-wYTB8WkzAr7acrlsp+0at1PZjOJPOxe6dDWKOG/kaX4Zjck9RXCFx3CtsxsAGzPn/Yv6AzgJC/CW1P5l+qxsqw==}
+  puppeteer@24.6.1:
+    resolution: {integrity: sha512-/4ocGfu8LNvDbWUqJZV2VmwEWpbOdJa69y2Jivd213tV0ekAtUh/bgT1hhW63SDN/CtrEucOPwoomZ+9M+eBEg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1674,7 +1670,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@puppeteer/browsers@2.9.0(patch_hash=7qpxjiyysopaaw65o76hsj7bgq)':
+  '@puppeteer/browsers@2.10.0':
     dependencies:
       debug: 4.4.0
       extract-zip: 2.0.1
@@ -1964,7 +1960,7 @@ snapshots:
       '@web/test-runner-coverage-v8': 0.8.0
       async-mutex: 0.4.0
       chrome-launcher: 0.15.2
-      puppeteer-core: 24.6.0
+      puppeteer-core: 24.6.1
     transitivePeerDependencies:
       - bare-buffer
       - bufferutil
@@ -1977,7 +1973,7 @@ snapshots:
       '@web/test-runner-coverage-v8': 0.8.0
       async-mutex: 0.4.0
       chrome-launcher: 0.15.2
-      puppeteer-core: 24.6.0
+      puppeteer-core: 24.6.1
     transitivePeerDependencies:
       - bare-buffer
       - bufferutil
@@ -2050,7 +2046,7 @@ snapshots:
     dependencies:
       '@web/test-runner-chrome': 0.18.0(patch_hash=sdcmdruhfajls5fgcrmywzbtte)
       '@web/test-runner-core': 0.13.4
-      puppeteer: 24.6.0(typescript@5.8.2)
+      puppeteer: 24.6.1(typescript@5.8.2)
     transitivePeerDependencies:
       - bare-buffer
       - bufferutil
@@ -2970,9 +2966,9 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@24.6.0:
+  puppeteer-core@24.6.1:
     dependencies:
-      '@puppeteer/browsers': 2.9.0(patch_hash=7qpxjiyysopaaw65o76hsj7bgq)
+      '@puppeteer/browsers': 2.10.0
       chromium-bidi: 3.0.0(devtools-protocol@0.0.1425554)
       debug: 4.4.0
       devtools-protocol: 0.0.1425554
@@ -2984,13 +2980,13 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  puppeteer@24.6.0(typescript@5.8.2):
+  puppeteer@24.6.1(typescript@5.8.2):
     dependencies:
-      '@puppeteer/browsers': 2.9.0(patch_hash=7qpxjiyysopaaw65o76hsj7bgq)
+      '@puppeteer/browsers': 2.10.0
       chromium-bidi: 3.0.0(devtools-protocol@0.0.1425554)
       cosmiconfig: 9.0.0(typescript@5.8.2)
       devtools-protocol: 0.0.1425554
-      puppeteer-core: 24.6.0
+      puppeteer-core: 24.6.1
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bare-buffer

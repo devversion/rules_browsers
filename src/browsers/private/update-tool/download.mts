@@ -1,5 +1,4 @@
-import {Browser, BrowserPlatform} from '@puppeteer/browsers/browser-data/types';
-import {getDownloadUrl} from '@puppeteer/browsers/install';
+import {Browser, BrowserPlatform, computeExecutablePath, getDownloadUrl} from '@puppeteer/browsers';
 import path from 'node:path';
 
 import {platforms} from './platforms.mjs';
@@ -19,9 +18,8 @@ export async function downloadAndHashBinariesForBrowser(
   tmpDir: string,
   browser: Browser,
   buildId: string,
-  relativeExecutablePathFn: (platform: BrowserPlatform) => string,
-  namedFiles: {[key in BrowserPlatform]?: Record<string, string>} = {},
-  excludeFilesForPerformance: {[key in BrowserPlatform]?: string[]} = {}
+  namedFiles: Partial<Record<BrowserPlatform, Record<string, string>>> = {},
+  excludeFilesForPerformance: Partial<Record<BrowserPlatform, string[]>> = {}
 ): Promise<BrowserBinaryInfo[]> {
   const downloadAndHashTasks: Promise<BrowserBinaryInfo>[] = [];
 
@@ -31,7 +29,12 @@ export async function downloadAndHashBinariesForBrowser(
 
     const platformNamedFiles = namedFiles[platform] ?? {};
     const platformExcludePatterns = excludeFilesForPerformance[platform] ?? [];
-    platformNamedFiles[browser.toUpperCase()] = relativeExecutablePathFn(platform);
+    platformNamedFiles[browser.toUpperCase()] = computeExecutablePath({
+      browser,
+      platform,
+      buildId: buildId,
+      cacheDir: null,
+    });
 
     downloadAndHashTasks.push(
       (async () => {
