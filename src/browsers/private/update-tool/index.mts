@@ -16,6 +16,10 @@ import {
   relativeExecutablePath as relativeFirefoxExecutablePath,
 } from '@puppeteer/browsers/browser-data/firefox';
 import {
+  resolveBuildId as resolveChromedriverBuild,
+  relativeExecutablePath as relativeChromedriverExecutablePath,
+} from '@puppeteer/browsers/browser-data/chromedriver';
+import {
   Browser,
   BrowserPlatform,
   ChromeReleaseChannel,
@@ -26,7 +30,6 @@ import path from 'node:path';
 import {downloadAndHashBinariesForBrowser} from './download.mjs';
 import {generateRepositorySetupBzlFile} from './generation.mjs';
 import fs from 'node:fs/promises';
-import {extraChromeBuildFileContent} from './extra_chrome_build_content.mjs';
 
 main().catch(e => {
   console.error(e);
@@ -36,12 +39,13 @@ main().catch(e => {
 async function main() {
   const tmpDir = await mkdtemp(path.join(os.tmpdir(), 'rules_browsers_tmp-'));
 
-  const [chromeBuildId, firefoxBuildId] = await Promise.all([
+  const [chromeBuildId, firefoxBuildId, chromedriverBuild] = await Promise.all([
     resolveChromeBuildId(ChromeReleaseChannel.STABLE),
     resolveFirefoxBuildId(FirefoxChannel.STABLE),
+    resolveChromedriverBuild(ChromeReleaseChannel.STABLE),
   ]);
 
-  const [chromeBinaries, firefoxBinaries] = await Promise.all([
+  const [chromeBinaries, chromedriverBinaries, firefoxBinaries] = await Promise.all([
     downloadAndHashBinariesForBrowser(
       tmpDir,
       // Puppeteer team suggests headless shell as it's more lightweight and faster.
@@ -56,21 +60,28 @@ async function main() {
         [BrowserPlatform.MAC_ARM]: ['**/*.log'],
       }
     ),
+    downloadAndHashBinariesForBrowser(tmpDir, Browser.CHROMEDRIVER, chromedriverBuild, platform =>
+      relativeChromedriverExecutablePath(platform, chromedriverBuild)
+    ),
     downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxBuildId, platform =>
       relativeFirefoxExecutablePath(platform, firefoxBuildId)
     ),
   ]);
 
-  const chromeBzl = generateRepositorySetupBzlFile(
-    Browser.CHROME,
-    chromeBinaries,
-    extraChromeBuildFileContent
+  const chromeBzl = generateRepositorySetupBzlFile(Browser.CHROME, chromeBinaries);
+  const chromedriverBzl = generateRepositorySetupBzlFile(
+    Browser.CHROMEDRIVER,
+    chromedriverBinaries
   );
   const firefoxBzl = generateRepositorySetupBzlFile(Browser.FIREFOX, firefoxBinaries, '');
 
   // Write results to `bzl` files.
   const workspaceRoot = process.env['BUILD_WORKING_DIRECTORY']!;
   await fs.writeFile(path.join(workspaceRoot, 'src/browsers/chromium/chromium.bzl'), chromeBzl);
+  await fs.writeFile(
+    path.join(workspaceRoot, 'src/browsers/chromium/chromedriver.bzl'),
+    chromedriverBzl
+  );
   await fs.writeFile(path.join(workspaceRoot, 'src/browsers/firefox/firefox.bzl'), firefoxBzl);
 
   await fs.rm(tmpDir, {recursive: true, maxRetries: 2});
