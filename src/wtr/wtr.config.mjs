@@ -5,11 +5,11 @@ import {fromRollup} from '@web/dev-server-rollup';
 import rollupVirtual from '@rollup/plugin-virtual';
 import fs from 'node:fs/promises';
 
-const chromiumBin = process.env.CHROMIUM_BIN;
+const chromeHeadlessBin = process.env.CHROME_HEADLESS_BIN;
 const firefoxBin = process.env.FIREFOX_BIN;
 const manualMode = process.env.MANUAL_MODE === '1';
 
-if (!chromiumBin && !firefoxBin && !manualMode) {
+if (!chromeHeadlessBin && !firefoxBin && !manualMode) {
   throw new Error('No browser/mode detected.');
 }
 
@@ -39,9 +39,9 @@ export default {
     puppeteerLauncher({
       concurrency: 1,
       launchOptions: {
-        executablePath: firefoxBin ?? chromiumBin,
+        executablePath: firefoxBin ?? chromeHeadlessBin,
         browser: firefoxBin ? 'firefox' : 'chrome',
-        args: chromiumBin
+        args: chromeHeadlessBin
           ? [
               '--no-sandbox',
               '--no-default-browser-check',
@@ -52,7 +52,7 @@ export default {
               '--disable-background-timer-throttling',
             ]
           : ['--disable-sandbox', '--no-remote'],
-        headless: true,
+        headless: chromeHeadlessBin ? 'shell' : true,
         env: {
           // Needed as otherwise Firefox would try write/read from sandbox protected HOME directory.
           HOME: process.env.TEST_TMPDIR,

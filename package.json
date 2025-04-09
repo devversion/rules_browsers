@@ -41,7 +41,6 @@
     },
     "patchedDependencies": {
       "@puppeteer/browsers@2.9.0": "patches/@puppeteer__browsers@2.9.0.patch",
-      "@web/test-runner-core@0.13.4": "patches/@web__test-runner-core.patch",
       "@web/test-runner-chrome@0.18.0": "patches/@web__test-runner-chrome@0.18.0.patch"
     }
   }

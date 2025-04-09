@@ -24,7 +24,7 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     elif is_chromium:
         browser_deps.append("@rules_browsers//src/browsers/chromium")
         toolchains.append("@rules_browsers//src/browsers/chromium:toolchain_alias")
-        env = {"CHROMIUM_BIN": "$(CHROME)"}
+        env = {"CHROME_HEADLESS_BIN": "$(CHROME-HEADLESS-SHELL)"}
     else:
         env = {"MANUAL_MODE": "1"}
         extra_tags += ["requires-network", "manual"]

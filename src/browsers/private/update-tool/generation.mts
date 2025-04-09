@@ -11,7 +11,7 @@ export function generateRepositorySetupBzlFile(
   for (const binary of binaries) {
     repositoryDefs.push(`
 browser_repo(
-    name = "rules_browsers_${binary.browser}_${binary.platform}",
+    name = "rules_browsers_${browser}_${binary.platform}",
     sha256 = "${binary.sha256}",
     # ${binary.buildId}
     urls = ["${binary.url}"],

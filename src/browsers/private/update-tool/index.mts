@@ -8,8 +8,8 @@
 
 import {
   resolveBuildId as resolveChromeBuildId,
-  relativeExecutablePath as relativeChromeExecutablePath,
-} from '@puppeteer/browsers/browser-data/chrome';
+  relativeExecutablePath as relativeChromeHeadlessExecutablePath,
+} from '@puppeteer/browsers/browser-data/chrome-headless-shell';
 import {
   FirefoxChannel,
   resolveBuildId as resolveFirefoxBuildId,
@@ -44,19 +44,16 @@ async function main() {
   const [chromeBinaries, firefoxBinaries] = await Promise.all([
     downloadAndHashBinariesForBrowser(
       tmpDir,
-      Browser.CHROME,
+      // Puppeteer team suggests headless shell as it's more lightweight and faster.
+      Browser.CHROMEHEADLESSSHELL,
       chromeBuildId,
-      platform => relativeChromeExecutablePath(platform, chromeBuildId),
+      platform => relativeChromeHeadlessExecutablePath(platform, chromeBuildId),
       {},
       {
-        // Exclude log files that chromium writes to each run, causing remote cache misses.
-        [BrowserPlatform.LINUX]: ['chrome-linux/chrome_debug.log'],
-        [BrowserPlatform.MAC]: [
-          'chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log',
-        ],
-        [BrowserPlatform.MAC_ARM]: [
-          'chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log',
-        ],
+        // Exclude log files that Chrome might write to— causing remote cache misses.
+        [BrowserPlatform.LINUX]: ['**/*.log'],
+        [BrowserPlatform.MAC]: ['**/*.log'],
+        [BrowserPlatform.MAC_ARM]: ['**/*.log'],
       }
     ),
     downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxBuildId, platform =>

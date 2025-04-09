@@ -5,34 +5,34 @@ def define_chrome_repositories():
     
   browser_repo(
       name = "rules_browsers_chrome_linux",
-      sha256 = "47349b3a8191a2db0572ff815a99117af7d226cf79ced863192143f263758249",
-      # 135.0.7049.42
-      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.42/linux64/chrome-linux64.zip"],
-      named_files = {"CHROME":"chrome-linux64/chrome"},
-      exclude_patterns = ["chrome-linux/chrome_debug.log"],
-      exports_files = ["chrome-linux64/chrome"],
+      sha256 = "496dd0223b408d9ea654150004161e65abafce15a698c02df4166192d4d33443",
+      # 135.0.7049.84
+      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/linux64/chrome-headless-shell-linux64.zip"],
+      named_files = {"CHROME-HEADLESS-SHELL":"chrome-headless-shell-linux64/chrome-headless-shell"},
+      exclude_patterns = ["**/*.log"],
+      exports_files = ["chrome-headless-shell-linux64/chrome-headless-shell"],
   )
   
   
   browser_repo(
       name = "rules_browsers_chrome_mac",
-      sha256 = "b1e0350c25bd05e6bfb2f63e72f601700b9f56d6fd7d32737e9e74d53566bb13",
-      # 135.0.7049.42
-      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.42/mac-x64/chrome-mac-x64.zip"],
-      named_files = {"CHROME":"chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"},
-      exclude_patterns = ["chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log"],
-      exports_files = ["chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"],
+      sha256 = "2f0e54cb41407173cf80f5ec31193d23da112695ab00e793e6ff043e5080b492",
+      # 135.0.7049.84
+      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/mac-x64/chrome-headless-shell-mac-x64.zip"],
+      named_files = {"CHROME-HEADLESS-SHELL":"chrome-headless-shell-mac-x64/chrome-headless-shell"},
+      exclude_patterns = ["**/*.log"],
+      exports_files = ["chrome-headless-shell-mac-x64/chrome-headless-shell"],
   )
   
   
   browser_repo(
       name = "rules_browsers_chrome_mac_arm",
-      sha256 = "687406447d13731f6cfd7ff2f25481623e287fbda1b5f58b59d9233327dc2b6b",
-      # 135.0.7049.42
-      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.42/mac-arm64/chrome-mac-arm64.zip"],
-      named_files = {"CHROME":"chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"},
-      exclude_patterns = ["chrome-mac/Chromium.app/Contents/Frameworks/Chromium Framework.framework/Versions/*/chrome_debug.log"],
-      exports_files = ["chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"],
+      sha256 = "ea286d83bb28e4178dd376f208b85ed1ef325f731472dc32e4e3d44e9f366f5e",
+      # 135.0.7049.84
+      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/mac-arm64/chrome-headless-shell-mac-arm64.zip"],
+      named_files = {"CHROME-HEADLESS-SHELL":"chrome-headless-shell-mac-arm64/chrome-headless-shell"},
+      exclude_patterns = ["**/*.log"],
+      exports_files = ["chrome-headless-shell-mac-arm64/chrome-headless-shell"],
   )
   
 
