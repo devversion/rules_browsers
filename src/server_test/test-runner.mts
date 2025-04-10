@@ -65,6 +65,7 @@ async function runTest(serverPath: string, testPath: string) {
     server = child_process.spawn(serverPath, [], {
       stdio: 'inherit',
       env: {
+        ...process.env,
         PORT: `${port}`,
       },
     });
