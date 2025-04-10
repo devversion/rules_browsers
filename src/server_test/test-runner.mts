@@ -6,6 +6,7 @@
 import * as child_process from 'child_process';
 import * as net from 'net';
 import getRandomPort from 'get-port';
+import {setTimeout} from 'node:timers/promises';
 
 /** Unique error when tests failed. */
 export class TestFailedError {}
@@ -18,11 +19,6 @@ function isPortBound(port: number) {
     client.once('error', () => resolve(false));
     client.connect(port);
   });
-}
-
-/** Returns a promise that resolves after the given number of ms. */
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
@@ -45,7 +41,7 @@ async function waitForPortBound(
     throw new Error('Timeout waiting for server to start');
   }
   const wait = Math.min(timeout, 500);
-  return sleep(wait).then(async () => {
+  return setTimeout(wait).then(async () => {
     await waitForPortBound(port, timeout - wait, abortSignal);
   });
 }
@@ -53,6 +49,8 @@ async function waitForPortBound(
 /** Starts a server and runs a test against it. */
 async function runTest(serverPath: string, testPath: string) {
   let server: child_process.ChildProcess | null = null;
+  let testComplete = false;
+
   return new Promise<void>(async (resolve, reject) => {
     const port = await getRandomPort();
     const abortController = new AbortController();
@@ -64,6 +62,7 @@ async function runTest(serverPath: string, testPath: string) {
     // Start the server.
     server = child_process.spawn(serverPath, [], {
       stdio: 'inherit',
+      detached: true,
       env: {
         ...process.env,
         PORT: `${port}`,
@@ -73,6 +72,10 @@ async function runTest(serverPath: string, testPath: string) {
       reject(error);
     });
     server.on('close', (code, signal) => {
+      if (testComplete) {
+        return;
+      }
+
       if (code !== 0 || signal !== null) {
         reject(Error(`Server exited with error. Code: ${code}, signal: ${signal}`));
         abortController.abort();
@@ -89,12 +92,21 @@ async function runTest(serverPath: string, testPath: string) {
     }
 
     const test = child_process.spawnSync(testPath, {stdio: 'inherit'});
+
+    testComplete = true;
+    if (server.pid) {
+      // Try kill full process group.
+      process.kill(-server.pid, 'SIGTERM');
+    } else {
+      server.kill('SIGTERM');
+    }
+
     if (test.status === 0) {
       resolve();
     } else {
       reject(new TestFailedError());
     }
-  }).finally(() => server?.kill());
+  });
 }
 
 async function main() {
