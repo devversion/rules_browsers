@@ -26,7 +26,9 @@ export default {
   staticLogging: true,
   debug: process.env['DEBUG'] !== undefined,
   manual: manualMode,
-  port: await findAvailablePort({port: 9876}),
+  // Note: Only prefer a specific port in manual mode. Otherwise we risk race conditions
+  // where multiple processes attempt the "preferred port" at the same time.
+  port: await findAvailablePort({port: manualMode ? 9876 : undefined}),
   plugins: [
     virtual({
       '@web/test-runner-core/browser/session.js': await fs.readFile(
