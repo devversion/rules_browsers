@@ -43,7 +43,7 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         tags = tags + extra_tags,
         env = env,
         toolchains = toolchains,
-        args = [
+        fixed_args = [
             "--config=../rules_browsers/src/wtr/wtr.config.mjs",
             "%s/**/*.spec.js" % native.package_name(),
             "%s/**/*.spec.mjs" % native.package_name(),
@@ -64,6 +64,6 @@ def wtr_test(name, deps, **kwargs):
         name = name,
         tests = [
             ":%s_firefox" % name,
-            "%s_chromium" % name,
+            ":%s_chromium" % name,
         ],
     )
