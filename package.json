@@ -22,6 +22,7 @@
     "jasmine": "^5.6.0",
     "prettier": "^3.5.3",
     "protractor": "^7.0.0",
+    "tinyglobby": "^0.2.12",
     "typescript": "5.8.2",
     "web-test-runner-jasmine": "0.1.0"
   },

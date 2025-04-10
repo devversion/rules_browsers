@@ -9,5 +9,6 @@ ts_project(
     deps = [
         "@rules_browsers//:node_modules/@types/node",
         "@rules_browsers//:node_modules/protractor",
+        "@rules_browsers//:node_modules/tinyglobby",
     ],
 )
