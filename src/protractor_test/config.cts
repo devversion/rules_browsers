@@ -47,7 +47,7 @@ export const config: Config = {
     browserName: 'chrome',
     chromeOptions: {
       binary: chromeHeadlessPath,
-      args: ['--headless', '--disable-gpu', '--disable-dev-shm-usage'],
+      args: ['--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
     },
   },
 };
