@@ -9,6 +9,7 @@ const chromeHeadlessBin = process.env['CHROME_HEADLESS_BIN'];
 const testServerPort = process.env['TEST_SERVER_PORT'];
 const testPackage = process.env['TEST_PACKAGE'];
 const extraUserConfigPath = process.env['CONFIG_PATH'];
+const enablePerfLogging = process.env['ENABLE_PERF_LOGGING'] === '1';
 
 assert(chromedriverBin, 'No chromedriver path specified.');
 assert(chromeHeadlessBin, 'No chrome headless path specified.');
@@ -36,6 +37,24 @@ const specFiles = globSync(
   {cwd: testPackage, absolute: true}
 );
 
+// Define the default capabilities value, and if perf logging is enabled, add perf logging flags.
+const capabilities: any = {
+  browserName: 'chrome',
+  chromeOptions: {
+    binary: chromeHeadlessPath,
+    args: ['--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
+  },
+};
+if (enablePerfLogging) {
+  capabilities.chromeOptions.perfLoggingPrefs = {
+    "traceCategories": "v8,blink.console,devtools.timeline,disabled-by-default-devtools.timeline,blink.user_timing",
+  },
+  capabilities.loggingPrefs = {
+    performance: 'ALL',
+    browser: 'ALL',
+  }
+}
+
 export const config: Config = {
   ...extraUserConfig,
   framework: 'jasmine',
@@ -43,11 +62,5 @@ export const config: Config = {
   chromeDriver: chromedriverPath,
   specs: specFiles,
   baseUrl: `http://localhost:${testServerPort}`,
-  capabilities: {
-    browserName: 'chrome',
-    chromeOptions: {
-      binary: chromeHeadlessPath,
-      args: ['--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
-    },
-  },
+  capabilities,
 };
