@@ -5,9 +5,9 @@ def define_chromedriver_repositories():
     
   browser_repo(
       name = "rules_browsers_chromedriver_linux",
-      sha256 = "6cf7127c91d8d16fdf1273048aff2e44fd5ea0edbdf27a462ad3b1105e96ce5b",
-      # 135.0.7049.84
-      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/linux64/chromedriver-linux64.zip"],
+      sha256 = "0ef562acf7a87733a77cf51f52e3841cf7fb63c17d618b6ccb45a9a53ca89017",
+      # 138.0.7204.49
+      urls = ["https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/linux64/chromedriver-linux64.zip"],
       named_files = {"CHROMEDRIVER":"chromedriver-linux64/chromedriver"},
       exclude_patterns = [],
       exports_files = ["chromedriver-linux64/chromedriver"],
@@ -16,9 +16,9 @@ def define_chromedriver_repositories():
   
   browser_repo(
       name = "rules_browsers_chromedriver_mac",
-      sha256 = "9f8c1d5b86d34c3fa392a651075977050a8f31a583ce10160d92946e56f3f197",
-      # 135.0.7049.84
-      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/mac-x64/chromedriver-mac-x64.zip"],
+      sha256 = "bff1fc6075912698a1699a8d0979da3fdc576775a3fe78e6ae68338459c8882f",
+      # 138.0.7204.49
+      urls = ["https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/mac-x64/chromedriver-mac-x64.zip"],
       named_files = {"CHROMEDRIVER":"chromedriver-mac-x64/chromedriver"},
       exclude_patterns = [],
       exports_files = ["chromedriver-mac-x64/chromedriver"],
@@ -27,9 +27,9 @@ def define_chromedriver_repositories():
   
   browser_repo(
       name = "rules_browsers_chromedriver_mac_arm",
-      sha256 = "50fb2da54c81d407da1157317d57a9d168cadcca9c042bf672355944b865264e",
-      # 135.0.7049.84
-      urls = ["https://storage.googleapis.com/chrome-for-testing-public/135.0.7049.84/mac-arm64/chromedriver-mac-arm64.zip"],
+      sha256 = "dc64ab4843ea298f02cd69e2995b7441544d4132b74ac97e14a596eaaf1cd697",
+      # 138.0.7204.49
+      urls = ["https://storage.googleapis.com/chrome-for-testing-public/138.0.7204.49/mac-arm64/chromedriver-mac-arm64.zip"],
       named_files = {"CHROMEDRIVER":"chromedriver-mac-arm64/chromedriver"},
       exclude_patterns = [],
       exports_files = ["chromedriver-mac-arm64/chromedriver"],

@@ -6,13 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {
-  resolveBuildId,
-  computeExecutablePath,
-  Browser,
-  BrowserPlatform,
-  BrowserTag,
-} from '@puppeteer/browsers';
+import {resolveBuildId, Browser, BrowserPlatform, BrowserTag} from '@puppeteer/browsers';
 import {mkdtemp} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -30,7 +24,9 @@ async function main() {
 
   const [chromeBuildId, firefoxBuildId, chromedriverBuildId] = await Promise.all([
     resolveBuildId(Browser.CHROMEHEADLESSSHELL, null!, BrowserTag.STABLE),
-    resolveBuildId(Browser.FIREFOX, null!, BrowserTag.STABLE),
+    // TODO: Explicitly forced to 135 as the latest stable seems to cause instability in RBE.
+    // See: https://github.com/devversion/rules_browsers/commit/afa52d3dffa7b41e8049821a3d859524cf01597b.
+    resolveBuildId(Browser.FIREFOX, null!, 'stable_135.0'),
     resolveBuildId(Browser.CHROMEDRIVER, null!, BrowserTag.STABLE),
   ]);
 
