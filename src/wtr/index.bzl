@@ -55,15 +55,21 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         **kwargs
     )
 
-def wtr_test(name, deps, **kwargs):
-    _base_wtr_test("%s_firefox" % name, deps = deps, mode = "firefox", **kwargs)
-    _base_wtr_test("%s_chromium" % name, deps = deps, mode = "chromium", **kwargs)
+def wtr_test(name, deps, firefox = True, chromium = True, **kwargs):
+    tests = []
+    if firefox:
+        _base_wtr_test("%s_firefox" % name, deps = deps, mode = "firefox", **kwargs)
+        tests.append(":%s_firefox" % name)
+    if chromium:
+        _base_wtr_test("%s_chromium" % name, deps = deps, mode = "chromium", **kwargs)
+        tests.append(":%s_chromium" % name)
+    
     _base_wtr_test("%s_debug" % name, deps = deps, mode = "manual", **kwargs)
+
+    if len(tests) == 0:
+        fail("A least one of `chromium` or `firefox` must be enabled")
 
     native.test_suite(
         name = name,
-        tests = [
-            ":%s_firefox" % name,
-            ":%s_chromium" % name,
-        ],
+        tests = tests
     )
