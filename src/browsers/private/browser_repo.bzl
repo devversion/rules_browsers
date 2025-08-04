@@ -12,7 +12,7 @@ def _browser_repo_impl(ctx):
 
         ctx.download(urls, download_file_name, sha256)
         exec_result = ctx.execute([
-            ctx.path(Label("@rules_browsers//src/browsers/private:convert_dmg_to_zip.sh")),
+            ctx.path(Label("//src/browsers/private:convert_dmg_to_zip.sh")),
             download_file_name,
             result_zip_name,
         ])

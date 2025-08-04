@@ -1,4 +1,4 @@
-load("@rules_browsers//src/browsers/private:browser_artifact.bzl", "NamedFilesInfo")
+load("//src/browsers/private:browser_artifact.bzl", "NamedFilesInfo")
 
 def _browser_toolchain_alias_impl(ctx):
     template_variables = {}
