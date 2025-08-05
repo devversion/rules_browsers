@@ -1,0 +1,23 @@
+name: Buildifier
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    # Allow manual execution.
+    workflow_dispatch:
+jobs:
+    buildifier:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: '1.24.0'
+            - name: install
+              run: go install github.com/bazelbuild/buildtools/buildifier@latest
+            - name: check
+              run: buildifier --mode=check -r .
+            - name: lint
+              run: buildifier --lint=warn -r .
+              continue-on-error: true

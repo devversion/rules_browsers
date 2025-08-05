@@ -63,7 +63,7 @@ def wtr_test(name, deps, firefox = True, chromium = True, **kwargs):
     if chromium:
         _base_wtr_test("%s_chromium" % name, deps = deps, mode = "chromium", **kwargs)
         tests.append(":%s_chromium" % name)
-    
+
     _base_wtr_test("%s_debug" % name, deps = deps, mode = "manual", **kwargs)
 
     if len(tests) == 0:
@@ -71,5 +71,5 @@ def wtr_test(name, deps, firefox = True, chromium = True, **kwargs):
 
     native.test_suite(
         name = name,
-        tests = tests
+        tests = tests,
     )
