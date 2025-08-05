@@ -1,4 +1,4 @@
-load("//src/browsers/private:browser_repo.bzl", "browser_repo")
+load("//browsers/private:browser_repo.bzl", "browser_repo")
 
 def define_chromedriver_repositories():
     browser_repo(

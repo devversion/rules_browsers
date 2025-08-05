@@ -12,7 +12,7 @@ def _browser_repo_impl(ctx):
 
         ctx.download(urls, download_file_name, sha256)
         exec_result = ctx.execute([
-            ctx.path(Label("//src/browsers/private:convert_dmg_to_zip.sh")),
+            ctx.path(Label("//browsers/private:convert_dmg_to_zip.sh")),
             download_file_name,
             result_zip_name,
         ])
@@ -37,7 +37,7 @@ def _browser_repo_impl(ctx):
     # `BUILD.bazel` file that exposes the archive files, together with the specified
     # named files using the `browser_artifact` rule.
     ctx.file("BUILD.bazel", content = """
-load("@rules_browsers//src/browsers/private:browser_artifact.bzl", "browser_artifact")
+load("@rules_browsers//browsers/private:browser_artifact.bzl", "browser_artifact")
 
 browser_artifact(
   name = "info",

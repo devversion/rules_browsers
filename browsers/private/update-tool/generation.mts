@@ -23,7 +23,7 @@ browser_repo(
   }
 
   return `
-load("@rules_browsers//src/browsers/private:browser_repo.bzl", "browser_repo")
+load("@rules_browsers//browsers/private:browser_repo.bzl", "browser_repo")
 
 def define_${browser}_repositories():
   ${repositoryDefs.join(`\n`).replace(/^/gm, '  ')}

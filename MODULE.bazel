@@ -5,7 +5,8 @@ module(
     version = "0.1.0",
 )
 
-browsers = use_extension("//src/browsers:extensions.bzl", "browsers")
+# Load browsers for tests.
+browsers = use_extension("//browsers:extensions.bzl", "browsers")
 browsers.chrome()
 browsers.chromedriver()
 browsers.firefox()
@@ -22,13 +23,20 @@ use_repo(
     "rules_browsers_firefox_mac_arm",
 )
 
+# Miscellaneous dependencies.
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.1")
+
+# Manually specify a recent Node.js version.
+bazel_dep(name = "rules_nodejs", version = "6.5.0")
+
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain(node_version = "22.18.0")
 
 # JS
 bazel_dep(name = "aspect_rules_js", version = "2.4.2")
 
-npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm", dev_dependency = True)
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
     name = "npm_rules_browsers",
     data = [
@@ -41,16 +49,10 @@ npm.npm_translate_lock(
 )
 use_repo(npm, "npm_rules_browsers")
 
-pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
-
-# Allows developers to use the matching pnpm version, for example:
-# bazel run -- @pnpm --dir /home/runner/work/rules_js/rules_js install
-use_repo(pnpm, "pnpm")
-
 # TS
 bazel_dep(name = "aspect_rules_ts", version = "3.6.3")
 
-rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext", dev_dependency = True)
+rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext")
 rules_ts_ext.deps(
     ts_version_from = "//:package.json",
 )

@@ -1,6 +1,6 @@
 load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@npm_rules_browsers//:protractor/package_json.bzl", protractor = "bin")
-load("@rules_browsers//src/server_test:index.bzl", "server_test")
+load("//server_test:index.bzl", "server_test")
 
 def protractor_test(name, server, deps, extra_config = {}, data = [], enable_perf_logging = False, **kwargs):
     write_file(
@@ -11,11 +11,13 @@ def protractor_test(name, server, deps, extra_config = {}, data = [], enable_per
 
     protractor.protractor_test(
         name = "%s_protractor" % name,
-        fixed_args = ["../rules_browsers/src/protractor_test/config.cjs"],
+        fixed_args = ["$(rootpath @rules_browsers//protractor_test:config)"],
         data = data + deps + [
             ":%s_protractor_extra_config" % name,
-            "@rules_browsers//src/browsers/chromium",
-            "@rules_browsers//src/protractor_test:config",
+            "@rules_browsers//browsers/chromium",
+            "@rules_browsers//protractor_test:config",
+            "//:node_modules/protractor",
+            "//:node_modules/tinyglobby",
         ],
         env = {
             "ENABLE_PERF_LOGGING": "1" if enable_perf_logging else "0",
@@ -24,7 +26,7 @@ def protractor_test(name, server, deps, extra_config = {}, data = [], enable_per
             "TEST_PACKAGE": native.package_name(),
             "CONFIG_PATH": "$(rootpath :%s_protractor_extra_config)" % name,
         },
-        toolchains = ["@rules_browsers//src/browsers/chromium:toolchain_alias"],
+        toolchains = ["@rules_browsers//browsers/chromium:toolchain_alias"],
         tags = ["manual"],
     )
 

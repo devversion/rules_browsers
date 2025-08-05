@@ -1,4 +1,4 @@
-load("@rules_browsers//src/browsers/private:browser_repo.bzl", "browser_repo")
+load("@rules_browsers//browsers/private:browser_repo.bzl", "browser_repo")
 
 def define_firefox_repositories():
     browser_repo(

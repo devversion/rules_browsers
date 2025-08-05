@@ -8,8 +8,8 @@ load("@aspect_rules_js//js:defs.bzl", "js_test")
 
 def server_test(server, test, **kwargs):
     js_test(
-        data = [server, test, "@rules_browsers//src/server_test:lib"],
+        data = [server, test, "@rules_browsers//server_test:lib"],
         args = ["$(rootpath %s)" % server, "$(rootpath %s)" % test],
-        entry_point = "@rules_browsers//src/server_test:test-runner.mjs",
+        entry_point = "@rules_browsers//server_test:test-runner.mjs",
         **kwargs
     )

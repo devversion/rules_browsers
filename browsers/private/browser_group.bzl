@@ -1,4 +1,4 @@
-load("//src/browsers/private:browser_artifact.bzl", "NamedFilesInfo")
+load("//browsers/private:browser_artifact.bzl", "NamedFilesInfo")
 
 def _browser_group_impl(ctx):
     named_files = {}

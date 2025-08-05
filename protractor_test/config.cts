@@ -21,7 +21,7 @@ const extraUserConfig =
 
 // Browser artifacts are short paths from a different repository, so
 // we need to join them with the current workspace root in the runfiles tree.
-const workspaceRoot = path.resolve(__dirname, '../../');
+const workspaceRoot = path.resolve(__dirname, '../');
 const chromedriverPath = path.join(workspaceRoot, chromedriverBin);
 const chromeHeadlessPath = path.join(workspaceRoot, chromeHeadlessBin);
 

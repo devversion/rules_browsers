@@ -18,12 +18,12 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     extra_tags = ["no-sandbox"]
 
     if is_firefox:
-        browser_deps.append("@rules_browsers//src/browsers/firefox")
-        toolchains.append("@rules_browsers//src/browsers/firefox:toolchain_alias")
+        browser_deps.append("@rules_browsers//browsers/firefox")
+        toolchains.append("@rules_browsers//browsers/firefox:toolchain_alias")
         env = {"FIREFOX_BIN": "$(FIREFOX)"}
     elif is_chromium:
-        browser_deps.append("@rules_browsers//src/browsers/chromium")
-        toolchains.append("@rules_browsers//src/browsers/chromium:toolchain_alias")
+        browser_deps.append("@rules_browsers//browsers/chromium")
+        toolchains.append("@rules_browsers//browsers/chromium:toolchain_alias")
         env = {"CHROME_HEADLESS_BIN": "$(CHROME-HEADLESS-SHELL)"}
     else:
         env = {"MANUAL_MODE": "1"}
@@ -32,19 +32,19 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     wtr.wtr_test(
         name = name,
         data = browser_deps + deps + [
-            "@rules_browsers//:node_modules/@web/test-runner-core",
-            "@rules_browsers//:node_modules/@web/test-runner-puppeteer",
-            "@rules_browsers//:node_modules/get-port",
-            "@rules_browsers//:node_modules/web-test-runner-jasmine",
-            "@rules_browsers//:node_modules/@web/dev-server-rollup",
-            "@rules_browsers//:node_modules/@rollup/plugin-virtual",
-            "@rules_browsers//src/wtr:wtr_config",
+            "//:node_modules/@web/test-runner-core",
+            "//:node_modules/@web/test-runner-puppeteer",
+            "//:node_modules/get-port",
+            "//:node_modules/web-test-runner-jasmine",
+            "//:node_modules/@web/dev-server-rollup",
+            "//:node_modules/@rollup/plugin-virtual",
+            "@rules_browsers//wtr:wtr_config",
         ],
         tags = tags + extra_tags,
         env = env,
         toolchains = toolchains,
         fixed_args = [
-            "--config=../rules_browsers/src/wtr/wtr.config.mjs",
+            "--config=$(rootpath @rules_browsers//wtr:wtr_config)",
             "%s/**/*.spec.js" % native.package_name(),
             "%s/**/*.spec.mjs" % native.package_name(),
             "%s/**/*.spec.cjs" % native.package_name(),
