@@ -123,7 +123,8 @@
     "https://bcr.bazel.build/modules/rules_license/1.0.0/source.json": "a52c89e54cc311196e478f8382df91c15f7a2bfdf4c6cd0e2675cc2ff0b56efb",
     "https://bcr.bazel.build/modules/rules_nodejs/6.2.0/MODULE.bazel": "ec27907f55eb34705adb4e8257952162a2d4c3ed0f0b3b4c3c1aad1fac7be35e",
     "https://bcr.bazel.build/modules/rules_nodejs/6.3.0/MODULE.bazel": "45345e4aba35dd6e4701c1eebf5a4e67af4ed708def9ebcdc6027585b34ee52d",
-    "https://bcr.bazel.build/modules/rules_nodejs/6.3.0/source.json": "1254ffd8d0d908a19c67add7fb5e2a1f604df133bc5d206425264293e2e537fc",
+    "https://bcr.bazel.build/modules/rules_nodejs/6.5.0/MODULE.bazel": "546d0cf79f36f9f6e080816045f97234b071c205f4542e3351bd4424282a8810",
+    "https://bcr.bazel.build/modules/rules_nodejs/6.5.0/source.json": "ac075bc5babebc25a0adc88ee885f2c8d8520d141f6e139ba9dfa0eedb5be908",
     "https://bcr.bazel.build/modules/rules_pkg/0.7.0/MODULE.bazel": "df99f03fc7934a4737122518bb87e667e62d780b610910f0447665a7e2be62dc",
     "https://bcr.bazel.build/modules/rules_pkg/1.0.1/MODULE.bazel": "5b1df97dbc29623bccdf2b0dcd0f5cb08e2f2c9050aab1092fd39a41e82686ff",
     "https://bcr.bazel.build/modules/rules_pkg/1.0.1/source.json": "bd82e5d7b9ce2d31e380dd9f50c111d678c3bdaca190cb76b0e1c71b05e1ba8a",
@@ -159,16 +160,16 @@
   },
   "selectedYankedVersions": {},
   "moduleExtensions": {
-    "//src/browsers:extensions.bzl%browsers": {
+    "//browsers:extensions.bzl%browsers": {
       "general": {
-        "bzlTransitiveDigest": "rHjp376d5udlYyM4783Neh3eabaScDSQDpLBl+lEE5I=",
-        "usagesDigest": "z2RQF1Ei/V0erJV7GPmZod+SViGwAdUwB6ESlmYGciI=",
+        "bzlTransitiveDigest": "yqhZdGXdR0JohAH2diKEa7TtjybE5ulk1cTFF5q5nL8=",
+        "usagesDigest": "0dDFTYW4a/Z5wlfEhG3GErmxrbw/4OjbJIfc3YaAUy0=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
           "rules_browsers_chrome_linux": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "142c7bce7a6f717c41c4c76f53a0db4f6ab72f2e0955eec7b2d8c9995c6c2668",
               "urls": [
@@ -186,7 +187,7 @@
             }
           },
           "rules_browsers_chrome_mac": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "5aa26c327efbfa6b88fb9beeb26701307dae99cbf77929a2bf241f4ddc97f8fc",
               "urls": [
@@ -204,7 +205,7 @@
             }
           },
           "rules_browsers_chrome_mac_arm": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "e8759d758b2e709bbe241d7b6828d8f531a115010bd476d13a3912967ce72336",
               "urls": [
@@ -222,7 +223,7 @@
             }
           },
           "rules_browsers_chromedriver_linux": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "0ef562acf7a87733a77cf51f52e3841cf7fb63c17d618b6ccb45a9a53ca89017",
               "urls": [
@@ -238,7 +239,7 @@
             }
           },
           "rules_browsers_chromedriver_mac": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "bff1fc6075912698a1699a8d0979da3fdc576775a3fe78e6ae68338459c8882f",
               "urls": [
@@ -254,7 +255,7 @@
             }
           },
           "rules_browsers_chromedriver_mac_arm": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "dc64ab4843ea298f02cd69e2995b7441544d4132b74ac97e14a596eaaf1cd697",
               "urls": [
@@ -270,7 +271,7 @@
             }
           },
           "rules_browsers_firefox_linux": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "6fcc1a2f95a6b232af82b4b7644566638c5df349e3095c65b7c18d1a63412d3d",
               "urls": [
@@ -286,7 +287,7 @@
             }
           },
           "rules_browsers_firefox_mac": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "e55e24e6b2a4980f4b9091900835977b282f599dcdd5e38b753d95bad8a11da9",
               "urls": [
@@ -302,7 +303,7 @@
             }
           },
           "rules_browsers_firefox_mac_arm": {
-            "repoRuleId": "@@//src/browsers/private:browser_repo.bzl%browser_repo",
+            "repoRuleId": "@@//browsers/private:browser_repo.bzl%browser_repo",
             "attributes": {
               "sha256": "e55e24e6b2a4980f4b9091900835977b282f599dcdd5e38b753d95bad8a11da9",
               "urls": [
@@ -450,7 +451,7 @@
     "@@aspect_rules_ts+//ts:extensions.bzl%ext": {
       "general": {
         "bzlTransitiveDigest": "aVqwKoRPrSXO367SJABlye04kmpR/9VM2xiXB3nh3Ls=",
-        "usagesDigest": "7+/oj+fNxFJyym74IzLmd3p/jhB456jGpUzlQ+bKdU8=",
+        "usagesDigest": "AhOAFe9uiw8di0gsfInIbSlRUsK6EjGLiJzelQLq3XA=",
         "recordedFileInputs": {
           "@@//package.json": "4c5dc8f5b82ef14aa43a28bf41747618c8b82067554f1e497920805174b56b13"
         },
@@ -699,8 +700,8 @@
     },
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
-        "bzlTransitiveDigest": "SqbzUarOVzAfK28Ca5+NIU3LUwnW/b3h0xXBUS97oyI=",
-        "usagesDigest": "bN4jPGVBAhjiBF7hmNi+qjNEKd4W693UPfLFkL4qeLA=",
+        "bzlTransitiveDigest": "hdICB1K7PX7oWtO8oksVTBDNt6xxiNERpcO4Yxoa0Gc=",
+        "usagesDigest": "yLc2EK4inNAwJN7bRRtoATI6JtdKbXLyRQlFGJpjpx8=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -713,7 +714,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "linux_amd64"
             }
@@ -726,7 +727,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "linux_arm64"
             }
@@ -739,7 +740,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "linux_s390x"
             }
@@ -752,7 +753,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "linux_ppc64le"
             }
@@ -765,7 +766,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "darwin_amd64"
             }
@@ -778,7 +779,7 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "darwin_arm64"
             }
@@ -791,9 +792,22 @@
               "node_urls": [
                 "https://nodejs.org/dist/v{version}/{filename}"
               ],
-              "node_version": "18.20.4",
+              "node_version": "22.18.0",
               "include_headers": false,
               "platform": "windows_amd64"
+            }
+          },
+          "nodejs_windows_arm64": {
+            "repoRuleId": "@@rules_nodejs+//nodejs:repositories.bzl%_nodejs_repositories",
+            "attributes": {
+              "node_download_auth": {},
+              "node_repositories": {},
+              "node_urls": [
+                "https://nodejs.org/dist/v{version}/{filename}"
+              ],
+              "node_version": "22.18.0",
+              "include_headers": false,
+              "platform": "windows_arm64"
             }
           },
           "nodejs": {

@@ -1,2 +1,3 @@
 node_modules
 src/browsers/private/update-tool/playwright
+test

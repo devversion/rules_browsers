@@ -1,5 +1,5 @@
 load("@aspect_rules_js//js:defs.bzl", "js_binary")
-load("//src/server_test:index.bzl", "server_test")
+load("@rules_browsers//server_test:index.bzl", "server_test")
 
 js_binary(
     name = "server_bin",

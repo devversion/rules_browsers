@@ -1,5 +1,5 @@
 load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_library")
-load("//src/protractor_test:index.bzl", "protractor_test")
+load("@rules_browsers//protractor_test:index.bzl", "protractor_test")
 
 js_binary(
     name = "server_bin",

@@ -1,8 +1,8 @@
 """Extension that allows loading browser repositories."""
 
-load("//src/browsers/chromium:chromedriver.bzl", "define_chromedriver_repositories")
-load("//src/browsers/chromium:chromium.bzl", "define_chrome_repositories")
-load("//src/browsers/firefox:firefox.bzl", "define_firefox_repositories")
+load("//browsers/chromium:chromedriver.bzl", "define_chromedriver_repositories")
+load("//browsers/chromium:chromium.bzl", "define_chrome_repositories")
+load("//browsers/firefox:firefox.bzl", "define_firefox_repositories")
 
 def _browsers_impl(ctx):
     for mod in ctx.modules:
