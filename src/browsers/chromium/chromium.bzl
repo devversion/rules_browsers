@@ -1,5 +1,5 @@
 
-load("@rules_browsers//src/browsers/private:browser_repo.bzl", "browser_repo")
+load("//src/browsers/private:browser_repo.bzl", "browser_repo")
 
 def define_chrome_repositories():
     
