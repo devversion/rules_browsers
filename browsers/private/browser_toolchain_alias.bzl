@@ -1,4 +1,6 @@
-load("//browsers/private:browser_artifact.bzl", "NamedFilesInfo")
+"""Implementation of browser_toolchain_alias."""
+
+load(":named_files_info.bzl", "NamedFilesInfo")
 
 def _browser_toolchain_alias_impl(ctx):
     template_variables = {}

@@ -1,4 +1,6 @@
-load("//browsers/private:browser_artifact.bzl", "NamedFilesInfo")
+"""Implementation of browser_group."""
+
+load(":named_files_info.bzl", "NamedFilesInfo")
 
 def _browser_group_impl(ctx):
     named_files = {}
