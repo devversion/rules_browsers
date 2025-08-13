@@ -32,12 +32,12 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     wtr.wtr_test(
         name = name,
         data = browser_deps + deps + [
-            "//:node_modules/@web/test-runner-core",
-            "//:node_modules/@web/test-runner-puppeteer",
-            "//:node_modules/get-port",
-            "//:node_modules/web-test-runner-jasmine",
-            "//:node_modules/@web/dev-server-rollup",
-            "//:node_modules/@rollup/plugin-virtual",
+            Label("//:node_modules/@web/test-runner-core"),
+            Label("//:node_modules/@web/test-runner-puppeteer"),
+            Label("//:node_modules/get-port"),
+            Label("//:node_modules/web-test-runner-jasmine"),
+            Label("//:node_modules/@web/dev-server-rollup"),
+            Label("//:node_modules/@rollup/plugin-virtual"),
             "@rules_browsers//wtr:wtr_config",
         ],
         tags = tags + extra_tags,
