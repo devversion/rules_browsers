@@ -1,9 +1,6 @@
-NamedFilesInfo = provider(
-    doc = "Provider exposing the named files of an extracted browser archive.",
-    fields = {
-        "value": "Dictionary of keys and their corresponding manifest paths",
-    },
-)
+"""Implementation of browser_artifact."""
+
+load(":named_files_info.bzl", "NamedFilesInfo")
 
 def _browser_artifact_impl(ctx):
     """Implementation of the `browser_artifact` rule."""
