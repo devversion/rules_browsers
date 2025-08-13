@@ -163,7 +163,7 @@
     "//browsers:extensions.bzl%browsers": {
       "general": {
         "bzlTransitiveDigest": "yqhZdGXdR0JohAH2diKEa7TtjybE5ulk1cTFF5q5nL8=",
-        "usagesDigest": "0dDFTYW4a/Z5wlfEhG3GErmxrbw/4OjbJIfc3YaAUy0=",
+        "usagesDigest": "ZdoKpZOeP/gz3J/+Vxx6G86muqFz6LGktGf1RJtJNpA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -451,14 +451,14 @@
     "@@aspect_rules_ts+//ts:extensions.bzl%ext": {
       "general": {
         "bzlTransitiveDigest": "aVqwKoRPrSXO367SJABlye04kmpR/9VM2xiXB3nh3Ls=",
-        "usagesDigest": "QgCJJqzfzt67YhcDRQ4LQ7mvPBhmWYFwo9v/cHAmVjw=",
+        "usagesDigest": "Ne/2xJQVh6sEkr1aKC/bfxC3n5M+URr/uNDlj2ffVkI=",
         "recordedFileInputs": {
-          "@@//package.json": "24fae2e64bcc44f0d8ab07473932c82f5bc05f12dad1431965dd027afe3730ec"
+          "@@//package.json": "0d8cc69cc2c9ecf0eff677fa86843ad9146eca22462aace022a09c3adcb979f8"
         },
         "recordedDirentsInputs": {},
         "envVariables": {},
         "generatedRepoSpecs": {
-          "npm_rules_browsers_typescript": {
+          "rules_browsers_npm_typescript": {
             "repoRuleId": "@@aspect_rules_ts+//ts/private:npm_repositories.bzl%http_archive_version",
             "attributes": {
               "bzlmod": true,
@@ -701,7 +701,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "hdICB1K7PX7oWtO8oksVTBDNt6xxiNERpcO4Yxoa0Gc=",
-        "usagesDigest": "yLc2EK4inNAwJN7bRRtoATI6JtdKbXLyRQlFGJpjpx8=",
+        "usagesDigest": "XBWFQdq6kA4UQLy+V98Utnzr/mOQ7B0cMq/WUNf+ErM=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
