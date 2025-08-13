@@ -54,11 +54,7 @@ bazel_dep(name = "aspect_rules_ts", version = "3.6.3")
 
 rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext")
 rules_ts_ext.deps(
-    # Specify a name manually to prevent conflicts in consumers that also use
-    # `aspect_rules_ts`. This requires that we override the default for `tsc`,
-    # `tsc_worker` and `validator` on all `ts_project` targets.
-    # Upstream issue: https://github.com/aspect-build/rules_ts/issues/843
-    name = "npm_rules_browsers_typescript",
+    name = "rules_browsers_npm_typescript",
     ts_version_from = "//:package.json",
 )
-use_repo(rules_ts_ext, "npm_rules_browsers_typescript")
+use_repo(rules_ts_ext, **{"npm_typescript": "rules_browsers_npm_typescript"})
