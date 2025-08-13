@@ -4,7 +4,8 @@ import findAvailablePort from 'get-port';
 import {fromRollup} from '@web/dev-server-rollup';
 import rollupVirtual from '@rollup/plugin-virtual';
 import fs from 'node:fs/promises';
-import { execSync } from 'node:child_process';
+import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 const chromeHeadlessBin = process.env.CHROME_HEADLESS_BIN;
 const firefoxBin = process.env.FIREFOX_BIN;
@@ -33,7 +34,7 @@ export default {
   plugins: [
     virtual({
       '@web/test-runner-core/browser/session.js': await fs.readFile(
-        'node_modules/@web/test-runner-core/browser/session.js',
+        join(dirname(fileURLToPath(import.meta.url)), '../node_modules/@web/test-runner-core/browser/session.js'),
         'utf8'
       ),
     }),
