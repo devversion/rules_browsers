@@ -15,12 +15,15 @@ use_repo(
     "rules_browsers_chrome_linux",
     "rules_browsers_chrome_mac",
     "rules_browsers_chrome_mac_arm",
+    "rules_browsers_chrome_win64",
     "rules_browsers_chromedriver_linux",
     "rules_browsers_chromedriver_mac",
     "rules_browsers_chromedriver_mac_arm",
+    "rules_browsers_chromedriver_win64",
     "rules_browsers_firefox_linux",
     "rules_browsers_firefox_mac",
     "rules_browsers_firefox_mac_arm",
+    "rules_browsers_firefox_win64",
 )
 
 # Miscellaneous dependencies.

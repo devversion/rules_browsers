@@ -42,6 +42,7 @@ async function main() {
         [BrowserPlatform.LINUX]: ['**/*.log'],
         [BrowserPlatform.MAC]: ['**/*.log'],
         [BrowserPlatform.MAC_ARM]: ['**/*.log'],
+        [BrowserPlatform.WIN64]: ['**/*.log'],
       }
     ),
     downloadAndHashBinariesForBrowser(tmpDir, Browser.CHROMEDRIVER, chromedriverBuildId),
@@ -57,12 +58,12 @@ async function main() {
 
   // Write results to `bzl` files.
   const workspaceRoot = process.env['BUILD_WORKING_DIRECTORY']!;
-  await fs.writeFile(path.join(workspaceRoot, 'src/browsers/chromium/chromium.bzl'), chromeBzl);
+  await fs.writeFile(path.join(workspaceRoot, 'browsers/chromium/chromium.bzl'), chromeBzl);
   await fs.writeFile(
-    path.join(workspaceRoot, 'src/browsers/chromium/chromedriver.bzl'),
+    path.join(workspaceRoot, 'browsers/chromium/chromedriver.bzl'),
     chromedriverBzl
   );
-  await fs.writeFile(path.join(workspaceRoot, 'src/browsers/firefox/firefox.bzl'), firefoxBzl);
+  await fs.writeFile(path.join(workspaceRoot, 'browsers/firefox/firefox.bzl'), firefoxBzl);
 
   await fs.rm(tmpDir, {recursive: true, maxRetries: 2});
 }

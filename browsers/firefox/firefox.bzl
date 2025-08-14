@@ -1,4 +1,4 @@
-load("@rules_browsers//browsers/private:browser_repo.bzl", "browser_repo")
+load("//browsers/private:browser_repo.bzl", "browser_repo")
 
 def define_firefox_repositories():
     browser_repo(
@@ -29,4 +29,14 @@ def define_firefox_repositories():
         named_files = {"FIREFOX": "Firefox.app/Contents/MacOS/firefox"},
         exclude_patterns = [],
         exports_files = ["Firefox.app/Contents/MacOS/firefox"],
+    )
+
+    browser_repo(
+        name = "rules_browsers_firefox_win64",
+        sha256 = "f46d3cb68caa4d4366b942c225d256e0fc15a189263cd9efe29eff0dbfe02685",
+        # stable_135.0
+        urls = ["https://archive.mozilla.org/pub/firefox/releases/135.0/win64/en-US/Firefox%20Setup%20135.0.exe"],
+        named_files = {"FIREFOX": "core/firefox.exe"},
+        exclude_patterns = [],
+        exports_files = ["core/firefox.exe"],
     )
