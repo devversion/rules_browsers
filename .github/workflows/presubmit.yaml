@@ -36,3 +36,26 @@ jobs:
         run: pnpm install
       - name: check
         run: pnpm format:check
+  build-and-test:
+    strategy:
+      matrix:
+        folder: ['.', 'test']
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+      - name: Check Bazel installation
+        run: |
+          which bazel
+          bazel version
+      - name: Build
+        run: bazel build //...
+      - name: Test
+        run: bazel test //...
