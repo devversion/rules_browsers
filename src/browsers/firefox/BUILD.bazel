@@ -17,6 +17,10 @@ browser_group(
             # Firefox has a launcher that conditionally starts x64/arm64
             "@rules_browsers_firefox_mac_arm//:info",
         ],
+        "//src/browsers/private:windows_x64": [
+            # Firefox has a launcher that conditionally starts x64/arm64
+            "@rules_browsers_firefox_win64//:info",
+        ],
         "//conditions:default": [],
     }),
 )

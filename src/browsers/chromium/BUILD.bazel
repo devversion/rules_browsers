@@ -18,6 +18,10 @@ browser_group(
             "@rules_browsers_chrome_mac_arm//:info",
             "@rules_browsers_chromedriver_mac_arm//:info",
         ],
+        "//src/browsers/private:windows_x64": [
+            "@rules_browsers_chrome_win64//:info",
+            "@rules_browsers_chromedriver_win64//:info",
+        ],
     }),
 )
 
