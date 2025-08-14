@@ -12,4 +12,5 @@ export const platforms: BrowserPlatform[] = [
   BrowserPlatform.LINUX,
   BrowserPlatform.MAC,
   BrowserPlatform.MAC_ARM,
+  BrowserPlatform.WIN64,
 ];

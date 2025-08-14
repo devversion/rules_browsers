@@ -42,6 +42,7 @@ async function main() {
         [BrowserPlatform.LINUX]: ['**/*.log'],
         [BrowserPlatform.MAC]: ['**/*.log'],
         [BrowserPlatform.MAC_ARM]: ['**/*.log'],
+        [BrowserPlatform.WIN64]: ['**/*.log'],
       }
     ),
     downloadAndHashBinariesForBrowser(tmpDir, Browser.CHROMEDRIVER, chromedriverBuildId),
