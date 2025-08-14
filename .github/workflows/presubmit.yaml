@@ -1,23 +1,50 @@
-name: Buildifier
+name: Presubmit
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
-    # Allow manual execution.
-    workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # Allow manual execution.
+  workflow_dispatch:
 jobs:
-    buildifier:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-go@v5
-              with:
-                  go-version: '1.24.0'
-            - name: install
-              run: go install github.com/bazelbuild/buildtools/buildifier@latest
-            - name: check
-              run: buildifier --mode=check -r .
-            - name: lint
-              run: buildifier --lint=warn -r .
-              continue-on-error: true
+  buildifier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.24.0"
+      - name: Install buildifier
+        run: go install github.com/bazelbuild/buildtools/buildifier@latest
+      - name: Check
+        run: buildifier --mode=check -r .
+      - name: Lint
+        run: buildifier --lint=warn -r .
+        continue-on-error: true
+  build-and-test:
+    strategy:
+      matrix:
+        folder: [".", "test"]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+      - name: Check Bazel installation
+        run: |
+          which bazel
+          bazel version
+      - name: Build
+        run: bazel build //...
+      - name: Test
+        run: bazel test //...
