@@ -21,7 +21,8 @@ const virtual = fromRollup(rollupVirtual);
 export default {
   ...jasmineTestRunnerConfig(),
   watch: false,
-  testsFinishTimeout: 1000 * 60 * 5,
+  testsFinishTimeout: 1000 * 60 * 5, // 5 minutes
+  browserStartTimeout: 1000 * 60 * 1, // 1 minute
   nodeResolve: false,
   concurrency: 1,
   concurrentBrowsers: 1,
