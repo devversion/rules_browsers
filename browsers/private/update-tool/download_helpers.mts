@@ -6,10 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {Readable} from 'node:stream';
-import fs from 'node:fs';
-import {readFile} from 'node:fs/promises';
-import {createHash} from 'node:crypto';
+import { Readable } from "node:stream";
+import fs from "node:fs";
+import { createHash } from "node:crypto";
 
 /**
  * Downloads a file and stores it at the given location.
@@ -35,8 +34,8 @@ export async function downloadFileThroughStreaming(
     const stream = Readable.fromWeb(result.body);
     const outStream = fs.createWriteStream(destinationPath);
 
-    stream.on('error', err => reject(err));
-    stream.on('close', () => resolve());
+    stream.on("error", (err) => reject(err));
+    stream.on("close", () => resolve());
     stream.pipe(outStream);
   });
 }
@@ -44,10 +43,10 @@ export async function downloadFileThroughStreaming(
 export async function sha256(filePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const stream = fs.createReadStream(filePath);
-    const hash = createHash('sha256');
+    const hash = createHash("sha256");
 
-    stream.on('error', err => reject(err));
-    stream.on('close', () => resolve(hash.digest('hex')));
+    stream.on("error", (err) => reject(err));
+    stream.on("close", () => resolve(hash.digest("hex")));
     stream.pipe(hash);
   });
 }

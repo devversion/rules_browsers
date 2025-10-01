@@ -1,8 +1,13 @@
-import {Browser, BrowserPlatform, computeExecutablePath, getDownloadUrl} from '@puppeteer/browsers';
-import path from 'node:path';
+import {
+  Browser,
+  BrowserPlatform,
+  computeExecutablePath,
+  getDownloadUrl,
+} from "@puppeteer/browsers";
+import path from "node:path";
 
-import {platforms} from './platforms.mjs';
-import {downloadFileThroughStreaming, sha256} from './download_helpers.mjs';
+import { platforms } from "./platforms.mjs";
+import { downloadFileThroughStreaming, sha256 } from "./download_helpers.mjs";
 
 export interface BrowserBinaryInfo {
   browser: Browser;

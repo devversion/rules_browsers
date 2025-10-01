@@ -6,64 +6,165 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {resolveBuildId, Browser, BrowserPlatform, BrowserTag} from '@puppeteer/browsers';
-import {mkdtemp} from 'node:fs/promises';
-import os from 'node:os';
-import path from 'node:path';
-import {downloadAndHashBinariesForBrowser} from './download.mjs';
-import {generateRepositorySetupBzlFile} from './generation.mjs';
-import fs from 'node:fs/promises';
+import { resolveBuildId, Browser, BrowserPlatform } from "@puppeteer/browsers";
+import { mkdtemp } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { downloadAndHashBinariesForBrowser } from "./download.mjs";
+import {
+  generateRepoInfo,
+  generateVersionsBzlFile,
+  Versions,
+} from "./generation.mjs";
+import fs from "node:fs/promises";
+import { getChromeMilestones, getFirefoxMilestones } from "./versions.mjs";
 
-main().catch(e => {
+main().catch((e) => {
   console.error(e);
   process.exitCode = 1;
 });
 
-async function main() {
-  const tmpDir = await mkdtemp(path.join(os.tmpdir(), 'rules_browsers_tmp-'));
+interface WriteVersionsOptions {
+  browser: Browser;
+  milestones: string[];
+  tmpDir: string;
+  workspaceRoot: string;
+  excludeFilesForPerformance?: Partial<Record<BrowserPlatform, string[]>>;
+  buildIdToVersion?: (buildId: string) => string;
+}
 
-  const [chromeBuildId, firefoxBuildId, chromedriverBuildId] = await Promise.all([
-    resolveBuildId(Browser.CHROMEHEADLESSSHELL, null!, BrowserTag.STABLE),
-    // TODO: Explicitly forced to 135 as the latest stable seems to cause instability in RBE.
-    // See: https://github.com/devversion/rules_browsers/commit/afa52d3dffa7b41e8049821a3d859524cf01597b.
-    resolveBuildId(Browser.FIREFOX, null!, 'stable_135.0'),
-    resolveBuildId(Browser.CHROMEDRIVER, null!, BrowserTag.STABLE),
-  ]);
+// We treat chrome-headless-shell as Chromium in the module. This function
+// ensures browser name is written to files as expected.
+function getReadableBrowserName(browser: Browser): string {
+  return browser === Browser.CHROMEHEADLESSSHELL ? "chromium" : browser;
+}
 
-  const [chromeBinaries, chromedriverBinaries, firefoxBinaries] = await Promise.all([
-    downloadAndHashBinariesForBrowser(
-      tmpDir,
-      // Puppeteer team suggests headless shell as it's more lightweight and faster.
-      Browser.CHROMEHEADLESSSHELL,
-      chromeBuildId,
-      {},
-      {
-        // Exclude log files that Chrome might write to— causing remote cache misses.
-        [BrowserPlatform.LINUX]: ['**/*.log'],
-        [BrowserPlatform.MAC]: ['**/*.log'],
-        [BrowserPlatform.MAC_ARM]: ['**/*.log'],
-        [BrowserPlatform.WIN64]: ['**/*.log'],
-      }
-    ),
-    downloadAndHashBinariesForBrowser(tmpDir, Browser.CHROMEDRIVER, chromedriverBuildId),
-    downloadAndHashBinariesForBrowser(tmpDir, Browser.FIREFOX, firefoxBuildId),
-  ]);
+async function downloadMilestonesAndWriteVersionsFiles({
+  browser,
+  milestones,
+  tmpDir,
+  workspaceRoot,
+  excludeFilesForPerformance,
+  buildIdToVersion,
+}: WriteVersionsOptions): Promise<void> {
+  buildIdToVersion = buildIdToVersion ?? ((buildId) => buildId);
 
-  const chromeBzl = generateRepositorySetupBzlFile(Browser.CHROME, chromeBinaries);
-  const chromedriverBzl = generateRepositorySetupBzlFile(
-    Browser.CHROMEDRIVER,
-    chromedriverBinaries
+  const buildIds = await Promise.all(
+    milestones.map((milestone) => resolveBuildId(browser, null!, milestone))
   );
-  const firefoxBzl = generateRepositorySetupBzlFile(Browser.FIREFOX, firefoxBinaries, '');
 
-  // Write results to `bzl` files.
-  const workspaceRoot = process.env['BUILD_WORKING_DIRECTORY']!;
-  await fs.writeFile(path.join(workspaceRoot, 'browsers/chromium/chromium.bzl'), chromeBzl);
+  const fileBasePath = path.join(
+    workspaceRoot,
+    "browsers/private/versions",
+    getReadableBrowserName(browser)
+  );
+  // We keep a JSON file around that only holds the versions without any of the
+  // additional content in the `.bzl` file. This enables merging of existing
+  // versions with newly fetched one's without having to do string gymnastics on
+  // the `.bzl` file.
+  const jsonFilePath = fileBasePath + ".json";
+  const bzlFilePath = fileBasePath + ".bzl";
+
+  let versions: Versions = {};
+
+  // Fetch the existing set of versions from the JSON. We _never_ delete a
+  // version we previously provided, even if a new version is available on the
+  // same milestone. If the new version has a different build ID, we will
+  // provide both versions. Otherwise the old version will remain.
+  try {
+    const currentVersionsRaw = await fs.readFile(jsonFilePath, "utf8");
+    const currentVersions = JSON.parse(currentVersionsRaw) as Versions;
+    versions = currentVersions;
+  } catch (err: unknown) {
+    console.warn("Failed to read versions JSON file:", (err as Error).message);
+  }
+
+  // Don't download versions we downloaded previously again. This would not
+  // catch cases where the binaries under an existing build ID changes, although
+  // this should ideally never happen (at least for Chrome).
+  const existingVersions = new Set(Object.keys(versions));
+  const filteredNewBuildIds = buildIds.filter(
+    (buildId) => !existingVersions.has(buildIdToVersion(buildId))
+  );
+
+  // Fetch the binaries for each build ID. The only reason we do this is to
+  // calculate the integrity of the files.
+  const binariesForBuilds = await Promise.all(
+    filteredNewBuildIds.map((buildId) =>
+      downloadAndHashBinariesForBrowser(
+        tmpDir,
+        browser,
+        buildId,
+        {},
+        excludeFilesForPerformance
+      )
+    )
+  );
+
+  for (const binariesForBuild of binariesForBuilds) {
+    const repoInfo = generateRepoInfo(binariesForBuild);
+    const version = buildIdToVersion(binariesForBuild[0].buildId);
+    versions[version] = repoInfo;
+  }
+
+  const allVersions = [...Object.keys(versions)];
+  const defaultVersion = allVersions[allVersions.length - 1];
+
+  // Write both the JSON and the `.bzl` file. They both contain the same
+  // versions list. The `.bzl` file just has some additional syntax.
+  await fs.writeFile(jsonFilePath, JSON.stringify(versions, null, 4));
   await fs.writeFile(
-    path.join(workspaceRoot, 'browsers/chromium/chromedriver.bzl'),
-    chromedriverBzl
+    bzlFilePath,
+    generateVersionsBzlFile(
+      getReadableBrowserName(browser),
+      defaultVersion,
+      versions
+    )
   );
-  await fs.writeFile(path.join(workspaceRoot, 'browsers/firefox/firefox.bzl'), firefoxBzl);
+}
 
-  await fs.rm(tmpDir, {recursive: true, maxRetries: 2});
+async function main() {
+  const tmpDir = await mkdtemp(path.join(os.tmpdir(), "rules_browsers_tmp-"));
+  const workspaceRoot = process.env["BUILD_WORKING_DIRECTORY"]!;
+
+  // Fetch the last 15 milestones for each browser. This is mostly relevant when
+  // browsers haven't been updated in a long time and we want to backfill. All
+  // browsers already present in the relevant versions file will be kept.
+  const [chromeMilestones, firefoxMilestones] = await Promise.all([
+    getChromeMilestones(15),
+    getFirefoxMilestones(15),
+  ]);
+
+  await Promise.all([
+    downloadMilestonesAndWriteVersionsFiles({
+      browser: Browser.CHROMEHEADLESSSHELL,
+      milestones: chromeMilestones,
+      tmpDir,
+      workspaceRoot,
+      excludeFilesForPerformance: {
+        // Exclude log files that Chrome might write to— causing remote cache misses.
+        [BrowserPlatform.LINUX]: ["**/*.log"],
+        [BrowserPlatform.MAC]: ["**/*.log"],
+        [BrowserPlatform.MAC_ARM]: ["**/*.log"],
+        [BrowserPlatform.WIN64]: ["**/*.log"],
+      },
+    }),
+    downloadMilestonesAndWriteVersionsFiles({
+      browser: Browser.CHROMEDRIVER,
+      milestones: chromeMilestones,
+      tmpDir,
+      workspaceRoot,
+    }),
+    downloadMilestonesAndWriteVersionsFiles({
+      browser: Browser.FIREFOX,
+      milestones: firefoxMilestones,
+      tmpDir,
+      workspaceRoot,
+      // We want Firefox to be addressable with "120.0" instead of
+      // "stable_120.0", so we rewrite the build ID.
+      buildIdToVersion: (buildId: string) => buildId.replace(/^stable_/, ""),
+    }),
+  ]);
+
+  await fs.rm(tmpDir, { recursive: true, maxRetries: 2 });
 }
