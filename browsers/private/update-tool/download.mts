@@ -3,11 +3,11 @@ import {
   BrowserPlatform,
   computeExecutablePath,
   getDownloadUrl,
-} from "@puppeteer/browsers";
-import path from "node:path";
+} from '@puppeteer/browsers';
+import path from 'node:path';
 
-import { platforms } from "./platforms.mjs";
-import { downloadFileThroughStreaming, sha256 } from "./download_helpers.mjs";
+import {platforms} from './platforms.mjs';
+import {downloadFileThroughStreaming, sha256} from './download_helpers.mjs';
 
 export interface BrowserBinaryInfo {
   browser: Browser;
@@ -24,7 +24,7 @@ export async function downloadAndHashBinariesForBrowser(
   browser: Browser,
   buildId: string,
   namedFiles: Partial<Record<BrowserPlatform, Record<string, string>>> = {},
-  excludeFilesForPerformance: Partial<Record<BrowserPlatform, string[]>> = {}
+  excludeFilesForPerformance: Partial<Record<BrowserPlatform, string[]>> = {},
 ): Promise<BrowserBinaryInfo[]> {
   const downloadAndHashTasks: Promise<BrowserBinaryInfo>[] = [];
 
@@ -53,7 +53,7 @@ export async function downloadAndHashBinariesForBrowser(
           excludeFilesForPerformance: platformExcludePatterns,
           namedFiles: platformNamedFiles,
         };
-      })()
+      })(),
     );
   }
 

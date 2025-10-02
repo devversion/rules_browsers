@@ -35,8 +35,11 @@ export default {
   plugins: [
     virtual({
       '@web/test-runner-core/browser/session.js': await fs.readFile(
-        join(dirname(fileURLToPath(import.meta.url)), '../node_modules/@web/test-runner-core/browser/session.js'),
-        'utf8'
+        join(
+          dirname(fileURLToPath(import.meta.url)),
+          '../node_modules/@web/test-runner-core/browser/session.js',
+        ),
+        'utf8',
       ),
     }),
   ],

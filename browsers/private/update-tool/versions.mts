@@ -12,10 +12,10 @@ interface ChromeForTestingLatestVersionsPerMilestoneResponse {
 }
 
 export async function getChromeMilestones(
-  maxMilestones: number
+  maxMilestones: number,
 ): Promise<Array<string>> {
   const response = await fetch(
-    "https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone.json"
+    'https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone.json',
   );
   const responseJson =
     (await response.json()) as ChromeForTestingLatestVersionsPerMilestoneResponse;
@@ -28,14 +28,14 @@ interface FirefoxMajorReleasesResponse {
 }
 
 export async function getFirefoxMilestones(
-  maxMilestones: number
+  maxMilestones: number,
 ): Promise<Array<string>> {
   const response = await fetch(
-    "https://product-details.mozilla.org/1.0/firefox_history_major_releases.json"
+    'https://product-details.mozilla.org/1.0/firefox_history_major_releases.json',
   );
   const responseJson = (await response.json()) as FirefoxMajorReleasesResponse;
   const milestones = Object.keys(responseJson);
   return [...milestones]
     .slice(-maxMilestones)
-    .map((milestone) => "stable_" + milestone);
+    .map((milestone) => 'stable_' + milestone);
 }

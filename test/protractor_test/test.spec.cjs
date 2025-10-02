@@ -5,6 +5,8 @@ describe('protractor test', () => {
   it('should work', async () => {
     browser.waitForAngularEnabled(false);
     await browser.get('');
-    expect(await browser.findElement(By.css('body')).getText()).toBe('Hello World!');
+    expect(await browser.findElement(By.css('body')).getText()).toBe(
+      'Hello World!',
+    );
   });
 });

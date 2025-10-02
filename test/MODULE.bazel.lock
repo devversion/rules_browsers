@@ -285,7 +285,7 @@
         "bzlTransitiveDigest": "HtmYghmgLUNZGpjTz2S/i+H1lny6cJjNSzzXeGMr+Xs=",
         "usagesDigest": "o6ZQ+aQccRPPimpJmY7Uef7FdHfdGWneXn1NqIwcsMA=",
         "recordedFileInputs": {
-          "@@rules_browsers+//package.json": "45572077938c7a4916e4aaedf7db7ce8425854ab92f35348cff02a2134023bb8"
+          "@@rules_browsers+//package.json": "ee3b7ba4117c7ab0ed5767dae08f75e1e6598dbad2f65d1029cd52fa9443af95"
         },
         "recordedDirentsInputs": {},
         "envVariables": {},
