@@ -16,11 +16,6 @@ def protractor_test(name, server, deps, extra_config = {}, data = [], enable_per
             ":%s_protractor_extra_config" % name,
             "@rules_browsers//browsers/chromium",
             "@rules_browsers//protractor_test:config",
-            # Depend on both the node modules from the calling module and the one's from the
-            # macro-defining module (rules_browsers). Without these, running Protractor tests fails
-            # when using Bzlmod.
-            "//:node_modules/protractor",
-            "//:node_modules/tinyglobby",
             Label("//:node_modules/protractor"),
             Label("//:node_modules/tinyglobby"),
         ],
