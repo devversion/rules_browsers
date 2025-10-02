@@ -13,7 +13,7 @@ export class TestFailedError {}
 
 /** Checks if the given port is bound. */
 function isPortBound(port: number) {
-  return new Promise<boolean>(resolve => {
+  return new Promise<boolean>((resolve) => {
     const client = new net.Socket();
     client.once('connect', () => resolve(true));
     client.once('error', () => resolve(false));
@@ -28,7 +28,7 @@ function isPortBound(port: number) {
 async function waitForPortBound(
   port: number,
   timeout: number,
-  abortSignal: AbortSignal
+  abortSignal: AbortSignal,
 ): Promise<void> {
   if (abortSignal.aborted) {
     return;
@@ -68,7 +68,7 @@ async function runTest(serverPath: string, testPath: string) {
         PORT: `${port}`,
       },
     });
-    server.on('error', error => {
+    server.on('error', (error) => {
       reject(error);
     });
     server.on('close', (code, signal) => {
@@ -77,7 +77,9 @@ async function runTest(serverPath: string, testPath: string) {
       }
 
       if (code !== 0 || signal !== null) {
-        reject(Error(`Server exited with error. Code: ${code}, signal: ${signal}`));
+        reject(
+          Error(`Server exited with error. Code: ${code}, signal: ${signal}`),
+        );
         abortController.abort();
       }
       server = null;
@@ -114,7 +116,7 @@ async function main() {
   await runTest(serverRootpath, testRootpath);
 }
 
-main().catch(e => {
+main().catch((e) => {
   if (e instanceof TestFailedError) {
     console.error('Tests failed.');
   } else {

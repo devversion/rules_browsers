@@ -6,18 +6,18 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import { resolveBuildId, Browser, BrowserPlatform } from "@puppeteer/browsers";
-import { mkdtemp } from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
-import { downloadAndHashBinariesForBrowser } from "./download.mjs";
+import {resolveBuildId, Browser, BrowserPlatform} from '@puppeteer/browsers';
+import {mkdtemp} from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import {downloadAndHashBinariesForBrowser} from './download.mjs';
 import {
   generateRepoInfo,
   generateVersionsBzlFile,
   Versions,
-} from "./generation.mjs";
-import fs from "node:fs/promises";
-import { getChromeMilestones, getFirefoxMilestones } from "./versions.mjs";
+} from './generation.mjs';
+import fs from 'node:fs/promises';
+import {getChromeMilestones, getFirefoxMilestones} from './versions.mjs';
 
 main().catch((e) => {
   console.error(e);
@@ -36,7 +36,7 @@ interface WriteVersionsOptions {
 // We treat chrome-headless-shell as Chromium in the module. This function
 // ensures browser name is written to files as expected.
 function getReadableBrowserName(browser: Browser): string {
-  return browser === Browser.CHROMEHEADLESSSHELL ? "chromium" : browser;
+  return browser === Browser.CHROMEHEADLESSSHELL ? 'chromium' : browser;
 }
 
 async function downloadMilestonesAndWriteVersionsFiles({
@@ -50,20 +50,20 @@ async function downloadMilestonesAndWriteVersionsFiles({
   buildIdToVersion = buildIdToVersion ?? ((buildId) => buildId);
 
   const buildIds = await Promise.all(
-    milestones.map((milestone) => resolveBuildId(browser, null!, milestone))
+    milestones.map((milestone) => resolveBuildId(browser, null!, milestone)),
   );
 
   const fileBasePath = path.join(
     workspaceRoot,
-    "browsers/private/versions",
-    getReadableBrowserName(browser)
+    'browsers/private/versions',
+    getReadableBrowserName(browser),
   );
   // We keep a JSON file around that only holds the versions without any of the
   // additional content in the `.bzl` file. This enables merging of existing
   // versions with newly fetched one's without having to do string gymnastics on
   // the `.bzl` file.
-  const jsonFilePath = fileBasePath + ".json";
-  const bzlFilePath = fileBasePath + ".bzl";
+  const jsonFilePath = fileBasePath + '.json';
+  const bzlFilePath = fileBasePath + '.bzl';
 
   let versions: Versions = {};
 
@@ -72,11 +72,11 @@ async function downloadMilestonesAndWriteVersionsFiles({
   // same milestone. If the new version has a different build ID, we will
   // provide both versions. Otherwise the old version will remain.
   try {
-    const currentVersionsRaw = await fs.readFile(jsonFilePath, "utf8");
+    const currentVersionsRaw = await fs.readFile(jsonFilePath, 'utf8');
     const currentVersions = JSON.parse(currentVersionsRaw) as Versions;
     versions = currentVersions;
   } catch (err: unknown) {
-    console.warn("Failed to read versions JSON file:", (err as Error).message);
+    console.warn('Failed to read versions JSON file:', (err as Error).message);
   }
 
   // Don't download versions we downloaded previously again. This would not
@@ -84,7 +84,7 @@ async function downloadMilestonesAndWriteVersionsFiles({
   // this should ideally never happen (at least for Chrome).
   const existingVersions = new Set(Object.keys(versions));
   const filteredNewBuildIds = buildIds.filter(
-    (buildId) => !existingVersions.has(buildIdToVersion(buildId))
+    (buildId) => !existingVersions.has(buildIdToVersion(buildId)),
   );
 
   // Fetch the binaries for each build ID. The only reason we do this is to
@@ -96,9 +96,9 @@ async function downloadMilestonesAndWriteVersionsFiles({
         browser,
         buildId,
         {},
-        excludeFilesForPerformance
-      )
-    )
+        excludeFilesForPerformance,
+      ),
+    ),
   );
 
   for (const binariesForBuild of binariesForBuilds) {
@@ -118,14 +118,14 @@ async function downloadMilestonesAndWriteVersionsFiles({
     generateVersionsBzlFile(
       getReadableBrowserName(browser),
       defaultVersion,
-      versions
-    )
+      versions,
+    ),
   );
 }
 
 async function main() {
-  const tmpDir = await mkdtemp(path.join(os.tmpdir(), "rules_browsers_tmp-"));
-  const workspaceRoot = process.env["BUILD_WORKING_DIRECTORY"]!;
+  const tmpDir = await mkdtemp(path.join(os.tmpdir(), 'rules_browsers_tmp-'));
+  const workspaceRoot = process.env['BUILD_WORKING_DIRECTORY']!;
 
   // Fetch the last 15 milestones for each browser. This is mostly relevant when
   // browsers haven't been updated in a long time and we want to backfill. All
@@ -143,10 +143,10 @@ async function main() {
       workspaceRoot,
       excludeFilesForPerformance: {
         // Exclude log files that Chrome might write to— causing remote cache misses.
-        [BrowserPlatform.LINUX]: ["**/*.log"],
-        [BrowserPlatform.MAC]: ["**/*.log"],
-        [BrowserPlatform.MAC_ARM]: ["**/*.log"],
-        [BrowserPlatform.WIN64]: ["**/*.log"],
+        [BrowserPlatform.LINUX]: ['**/*.log'],
+        [BrowserPlatform.MAC]: ['**/*.log'],
+        [BrowserPlatform.MAC_ARM]: ['**/*.log'],
+        [BrowserPlatform.WIN64]: ['**/*.log'],
       },
     }),
     downloadMilestonesAndWriteVersionsFiles({
@@ -162,9 +162,9 @@ async function main() {
       workspaceRoot,
       // We want Firefox to be addressable with "120.0" instead of
       // "stable_120.0", so we rewrite the build ID.
-      buildIdToVersion: (buildId: string) => buildId.replace(/^stable_/, ""),
+      buildIdToVersion: (buildId: string) => buildId.replace(/^stable_/, ''),
     }),
   ]);
 
-  await fs.rm(tmpDir, { recursive: true, maxRetries: 2 });
+  await fs.rm(tmpDir, {recursive: true, maxRetries: 2});
 }
