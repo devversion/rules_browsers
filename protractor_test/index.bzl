@@ -2,7 +2,16 @@ load("@bazel_skylib//rules:write_file.bzl", "write_file")
 load("@npm_rules_browsers//:protractor/package_json.bzl", protractor = "bin")
 load("//server_test:index.bzl", "server_test")
 
-def protractor_test(name, server, deps, extra_config = {}, data = [], enable_perf_logging = False, **kwargs):
+def protractor_test(
+        name,
+        server,
+        deps,
+        chromium,
+        chromium_toolchain,
+        extra_config = {},
+        data = [],
+        enable_perf_logging = False,
+        **kwargs):
     write_file(
         name = "%s_protractor_extra_config" % name,
         out = "%s_protractor_extra_config.json" % name,
@@ -14,7 +23,7 @@ def protractor_test(name, server, deps, extra_config = {}, data = [], enable_per
         fixed_args = ["$(rootpath @rules_browsers//protractor_test:config)"],
         data = data + deps + [
             ":%s_protractor_extra_config" % name,
-            "@rules_browsers//browsers/chromium",
+            chromium,
             "@rules_browsers//protractor_test:config",
             Label("//:node_modules/protractor"),
             Label("//:node_modules/tinyglobby"),
@@ -26,7 +35,7 @@ def protractor_test(name, server, deps, extra_config = {}, data = [], enable_per
             "TEST_PACKAGE": native.package_name(),
             "CONFIG_PATH": "$(rootpath :%s_protractor_extra_config)" % name,
         },
-        toolchains = ["@rules_browsers//browsers/chromium:toolchain_alias"],
+        toolchains = [chromium_toolchain],
         tags = ["manual"],
     )
 

@@ -1,15 +1,16 @@
 load("@npm_rules_browsers//:@web/test-runner/package_json.bzl", wtr = "bin")
 
-def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
-    is_firefox = mode == "firefox"
-    is_chromium = mode == "chromium"
-
-    browser_deps = []
-    toolchains = []
-    env = {
+def _base_wtr_test(
+        name,
+        deps,
+        env = {},
+        tags = [],
+        **kwargs):
+    base_env = {
         "CI": "1",
         "FORCE_COLOR": "1",
     }
+    base_env.update(env)
 
     # Sandbox is very slow, and it seems like modern browsers end up being
     # much stricter at this point. Back with Karma it was possible to run with
@@ -17,21 +18,9 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     # it also solves some launch problems where e.g. Firefox access `HOME`.
     extra_tags = ["no-sandbox"]
 
-    if is_firefox:
-        browser_deps.append("@rules_browsers//browsers/firefox")
-        toolchains.append("@rules_browsers//browsers/firefox:toolchain_alias")
-        env = {"FIREFOX_BIN": "$(FIREFOX)"}
-    elif is_chromium:
-        browser_deps.append("@rules_browsers//browsers/chromium")
-        toolchains.append("@rules_browsers//browsers/chromium:toolchain_alias")
-        env = {"CHROME_HEADLESS_BIN": "$(CHROME-HEADLESS-SHELL)"}
-    else:
-        env = {"MANUAL_MODE": "1"}
-        extra_tags += ["requires-network", "manual"]
-
     wtr.wtr_test(
         name = name,
-        data = browser_deps + deps + [
+        data = deps + [
             Label("//:node_modules/@web/test-runner-core"),
             Label("//:node_modules/@web/test-runner-puppeteer"),
             Label("//:node_modules/get-port"),
@@ -42,7 +31,6 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         ],
         tags = tags + extra_tags,
         env = env,
-        toolchains = toolchains,
         fixed_args = [
             "--config=$(rootpath @rules_browsers//wtr:wtr_config)",
             "%s/**/*.spec.js" % native.package_name(),
@@ -55,16 +43,40 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         **kwargs
     )
 
-def wtr_test(name, deps, firefox = True, chromium = True, **kwargs):
+def wtr_test(name, deps, firefox, chromium, tags = [], env = {}, **kwargs):
     tests = []
     if firefox:
-        _base_wtr_test("%s_firefox" % name, deps = deps, mode = "firefox", **kwargs)
+        firefox_env = {"FIREFOX_BIN": "$(FIREFOX)"}
+        firefox_env.update(env)
+        _base_wtr_test(
+            name = "%s_firefox" % name,
+            deps = deps + [firefox],
+            tags = tags,
+            env = firefox_env,
+            **kwargs
+        )
         tests.append(":%s_firefox" % name)
     if chromium:
-        _base_wtr_test("%s_chromium" % name, deps = deps, mode = "chromium", **kwargs)
+        chromium_env = {"CHROME_HEADLESS_BIN": "$(CHROME-HEADLESS-SHELL)"}
+        chromium_env.update(env)
+        _base_wtr_test(
+            name = "%s_chromium" % name,
+            deps = deps + [chromium],
+            tags = tags,
+            env = chromium_env,
+            **kwargs
+        )
         tests.append(":%s_chromium" % name)
 
-    _base_wtr_test("%s_debug" % name, deps = deps, mode = "manual", **kwargs)
+    manual_env = {"MANUAL_MODE": "1"}
+    manual_env.update(env)
+    _base_wtr_test(
+        name = "%s_debug" % name,
+        deps = deps,
+        tags = ["requires-network", "manual"] + tags,
+        env = manual_env,
+        **kwargs
+    )
 
     if len(tests) == 0:
         fail("A least one of `chromium` or `firefox` must be enabled")

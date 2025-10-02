@@ -5,27 +5,6 @@ module(
     version = "0.3.0",
 )
 
-# Load browsers for tests.
-browsers = use_extension("//browsers:extensions.bzl", "browsers")
-browsers.chrome()
-browsers.chromedriver()
-browsers.firefox()
-use_repo(
-    browsers,
-    "rules_browsers_chrome_linux",
-    "rules_browsers_chrome_mac",
-    "rules_browsers_chrome_mac_arm",
-    "rules_browsers_chrome_win64",
-    "rules_browsers_chromedriver_linux",
-    "rules_browsers_chromedriver_mac",
-    "rules_browsers_chromedriver_mac_arm",
-    "rules_browsers_chromedriver_win64",
-    "rules_browsers_firefox_linux",
-    "rules_browsers_firefox_mac",
-    "rules_browsers_firefox_mac_arm",
-    "rules_browsers_firefox_win64",
-)
-
 # Miscellaneous dependencies.
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.1")

@@ -283,9 +283,9 @@
     "@@aspect_rules_ts+//ts:extensions.bzl%ext": {
       "general": {
         "bzlTransitiveDigest": "HtmYghmgLUNZGpjTz2S/i+H1lny6cJjNSzzXeGMr+Xs=",
-        "usagesDigest": "o6ZQ+aQccRPPimpJmY7Uef7FdHfdGWneXn1NqIwcsMA=",
+        "usagesDigest": "hcw6pfBTY5FRdnMfiHs8Ly3vMKrQTioTmv6HQtUvjkA=",
         "recordedFileInputs": {
-          "@@rules_browsers+//package.json": "ee3b7ba4117c7ab0ed5767dae08f75e1e6598dbad2f65d1029cd52fa9443af95"
+          "@@rules_browsers+//package.json": "d5e7a05131b6ebf4c09d49afe82c3018182415b3a9c53000a32a7032f491d2c4"
         },
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -386,7 +386,7 @@
     "@@rules_browsers+//browsers:extensions.bzl%browsers": {
       "general": {
         "bzlTransitiveDigest": "5qGeNhkAX+K38eP99JIb/oQImXIIP+INtrFbDchPIBQ=",
-        "usagesDigest": "42aF97AuiQj9AyTbqW7+LZw7Cg2wHH1FvzdxqiJHyiM=",
+        "usagesDigest": "o+fKsB+Nn9zPwx/H2NB3c5aWoXh3ibFoSqeuzkLJvL4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -745,7 +745,7 @@
     "@@rules_nodejs+//nodejs:extensions.bzl%node": {
       "general": {
         "bzlTransitiveDigest": "hdICB1K7PX7oWtO8oksVTBDNt6xxiNERpcO4Yxoa0Gc=",
-        "usagesDigest": "yuAv1r70HW1JGQtiNoSHkRzMTTefHS9zO+XSQZJ0A1U=",
+        "usagesDigest": "XaUiY4rScvIDyRymQQMRZYzKv7jC38megPbohjTMpYU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

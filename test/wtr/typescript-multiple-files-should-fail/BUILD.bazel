@@ -13,6 +13,12 @@ ts_project(
 
 wtr_test(
     name = "test",
+    chromium = "//:chromium",
     expected_exit_code = 1,
+    firefox = "//:firefox",
+    toolchains = [
+        "//:firefox_toolchain_alias",
+        "//:chromium_toolchain_alias",
+    ],
     deps = [":test_lib"],
 )

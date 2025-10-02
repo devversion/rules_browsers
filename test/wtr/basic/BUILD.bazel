@@ -9,5 +9,11 @@ js_library(
 
 wtr_test(
     name = "test",
+    chromium = "//:chromium",
+    firefox = "//:firefox",
+    toolchains = [
+        "//:firefox_toolchain_alias",
+        "//:chromium_toolchain_alias",
+    ],
     deps = [":test_lib"],
 )

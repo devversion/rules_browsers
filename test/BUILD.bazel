@@ -1,3 +1,61 @@
 load("@npm_rules_browsers//:defs.bzl", "npm_link_all_packages")
+load("@rules_browsers//browsers:browser_group.bzl", "browser_group")
+load("@rules_browsers//browsers:browser_toolchain_alias.bzl", "browser_toolchain_alias")
 
 npm_link_all_packages()
+
+browser_group(
+    name = "chromium",
+    visibility = ["//:__subpackages__"],
+    deps = select({
+        "@rules_browsers//browsers:linux_x64": [
+            "@rules_browsers_chrome_linux//:info",
+            "@rules_browsers_chromedriver_linux//:info",
+        ],
+        "@rules_browsers//browsers:macos_x64": [
+            "@rules_browsers_chrome_mac//:info",
+            "@rules_browsers_chromedriver_mac//:info",
+        ],
+        "@rules_browsers//browsers:macos_arm64": [
+            "@rules_browsers_chrome_mac_arm//:info",
+            "@rules_browsers_chromedriver_mac_arm//:info",
+        ],
+        "@rules_browsers//browsers:windows_x64": [
+            "@rules_browsers_chrome_win64//:info",
+            "@rules_browsers_chromedriver_win64//:info",
+        ],
+    }),
+)
+
+browser_toolchain_alias(
+    name = "chromium_toolchain_alias",
+    visibility = ["//:__subpackages__"],
+    deps = [":chromium"],
+)
+
+browser_group(
+    name = "firefox",
+    visibility = ["//:__subpackages__"],
+    deps = select({
+        "@rules_browsers//browsers:linux_x64": [
+            "@rules_browsers_firefox_linux//:info",
+        ],
+        "@rules_browsers//browsers:macos_x64": [
+            # Firefox has a launcher that conditionally starts x64/arm64
+            "@rules_browsers_firefox_mac//:info",
+        ],
+        "@rules_browsers//browsers:macos_arm64": [
+            # Firefox has a launcher that conditionally starts x64/arm64
+            "@rules_browsers_firefox_mac_arm//:info",
+        ],
+        "@rules_browsers//browsers:windows_x64": [
+            "@rules_browsers_firefox_win64//:info",
+        ],
+    }),
+)
+
+browser_toolchain_alias(
+    name = "firefox_toolchain_alias",
+    visibility = ["//:__subpackages__"],
+    deps = [":firefox"],
+)

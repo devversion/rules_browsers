@@ -13,6 +13,8 @@ js_library(
 
 protractor_test(
     name = "test",
+    chromium = "//:chromium",
+    chromium_toolchain = "//:chromium_toolchain_alias",
     server = ":server_bin",
     deps = [
         ":tests",
