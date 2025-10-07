@@ -21,19 +21,22 @@ def _resolve_latest_version(name, versions):
     return use_version
 
 def _browsers_impl(ctx):
-    chrome_versions = set()
-    chromedriver_versions = set()
-    firefox_versions = set()
+    chrome_versions = []
+    chromedriver_versions = []
+    firefox_versions = []
 
     for mod in ctx.modules:
         for tag in mod.tags.chrome:
-            chrome_versions.add(tag.version)
+            if tag.version not in chrome_versions:
+                chrome_versions.append(tag.version)
 
         for tag in mod.tags.chromedriver:
-            chromedriver_versions.add(tag.version)
+            if tag.version not in chromedriver_versions:
+                chromedriver_versions.append(tag.version)
 
         for tag in mod.tags.firefox:
-            firefox_versions.add(tag.version)
+            if tag.version not in firefox_versions:
+                firefox_versions.append(tag.version)
 
     if len(chrome_versions) > 0:
         define_chrome_repositories(_resolve_latest_version("Chrome", chrome_versions))
