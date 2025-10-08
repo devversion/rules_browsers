@@ -108,7 +108,12 @@ async function downloadMilestonesAndWriteVersionsFiles({
   }
 
   const allVersions = [...Object.keys(versions)];
-  const defaultVersion = allVersions[allVersions.length - 1];
+
+  // Since 136.0 firefox in RBE causes `Protocol error (session.new): Target closed` errors
+  // This can be tested/debugged via `pnpm bazel test //packages/core/test/acceptance/selectorless:selectorless_web_firefox  --config=remote --google_default_credentials`
+  // in the angular/angular repo.
+  const defaultVersion =
+    browser === 'firefox' ? '135.0' : allVersions[allVersions.length - 1];
 
   // Write both the JSON and the `.bzl` file. They both contain the same
   // versions list. The `.bzl` file just has some additional syntax.
