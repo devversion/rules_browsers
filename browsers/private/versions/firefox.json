@@ -508,5 +508,39 @@
         "FIREFOX": "core/firefox.exe"
       }
     }
+  },
+  "144.0": {
+    "linux": {
+      "url": "https://archive.mozilla.org/pub/firefox/releases/144.0/linux-x86_64/en-US/firefox-144.0.tar.xz",
+      "integrity": "c66a48222ff67d51560240d321895c6926c9b3af345cbf688ced8517781d88d1",
+      "exclude_patterns": [],
+      "named_files": {
+        "FIREFOX": "firefox/firefox"
+      }
+    },
+    "mac": {
+      "url": "https://archive.mozilla.org/pub/firefox/releases/144.0/mac/en-US/Firefox%20144.0.dmg",
+      "integrity": "1e444b80921bc999d56c05a7decc1eaf88c0297cac5b90416299af2c77f5ecc9",
+      "exclude_patterns": [],
+      "named_files": {
+        "FIREFOX": "Firefox.app/Contents/MacOS/firefox"
+      }
+    },
+    "mac_arm": {
+      "url": "https://archive.mozilla.org/pub/firefox/releases/144.0/mac/en-US/Firefox%20144.0.dmg",
+      "integrity": "1e444b80921bc999d56c05a7decc1eaf88c0297cac5b90416299af2c77f5ecc9",
+      "exclude_patterns": [],
+      "named_files": {
+        "FIREFOX": "Firefox.app/Contents/MacOS/firefox"
+      }
+    },
+    "win64": {
+      "url": "https://archive.mozilla.org/pub/firefox/releases/144.0/win64/en-US/Firefox%20Setup%20144.0.exe",
+      "integrity": "d1e8a7c061e25a41c8dfa85e3aee8e86e9263c69104d80906c978c8d0556563a",
+      "exclude_patterns": [],
+      "named_files": {
+        "FIREFOX": "core/firefox.exe"
+      }
+    }
   }
 }

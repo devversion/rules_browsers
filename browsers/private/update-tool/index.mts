@@ -14,10 +14,12 @@ import {downloadAndHashBinariesForBrowser} from './download.mjs';
 import {
   generateRepoInfo,
   generateVersionsBzlFile,
+  sortVersions,
   Versions,
 } from './generation.mjs';
 import fs from 'node:fs/promises';
 import {getChromeMilestones, getFirefoxMilestones} from './versions.mjs';
+import {exec} from 'node:child_process';
 
 main().catch((e) => {
   console.error(e);
@@ -107,12 +109,16 @@ async function downloadMilestonesAndWriteVersionsFiles({
     versions[version] = repoInfo;
   }
 
+  // Sort versions since old versions will keep getting added after newer ones
+  // are already out.
+  versions = sortVersions(versions);
+
   const allVersions = [...Object.keys(versions)];
   const defaultVersion = allVersions[allVersions.length - 1];
 
   // Write both the JSON and the `.bzl` file. They both contain the same
   // versions list. The `.bzl` file just has some additional syntax.
-  await fs.writeFile(jsonFilePath, JSON.stringify(versions, null, 4));
+  await fs.writeFile(jsonFilePath, JSON.stringify(versions, null, 2) + '\n');
   await fs.writeFile(
     bzlFilePath,
     generateVersionsBzlFile(
@@ -121,6 +127,26 @@ async function downloadMilestonesAndWriteVersionsFiles({
       versions,
     ),
   );
+
+  // Format the resulting `.json` file. Prettier may apply some formatting that
+  // isn't consistent with default stringification (e.g. line length).
+  exec(`npx prettier --write ${jsonFilePath}`, (err, stdout, stderr) => {
+    if (err) {
+      console.log(stdout);
+      console.log(stderr);
+      console.warn(`Formatting of ${jsonFilePath} failed: ${err.message}`);
+    }
+  });
+
+  // Format the resulting `.bzl` file. JSON is valid here, but it's not
+  // formatted quite right (e.g. no trailing comma).
+  exec(`buildifier ${bzlFilePath}`, (err, stdout, stderr) => {
+    if (err) {
+      console.log(stdout);
+      console.log(stderr);
+      console.warn(`Formatting of ${bzlFilePath} failed: ${err.message}`);
+    }
+  });
 }
 
 async function main() {
