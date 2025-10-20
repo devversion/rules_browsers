@@ -118,7 +118,7 @@ async function downloadMilestonesAndWriteVersionsFiles({
 
   // Write both the JSON and the `.bzl` file. They both contain the same
   // versions list. The `.bzl` file just has some additional syntax.
-  await fs.writeFile(jsonFilePath, JSON.stringify(versions, null, 4));
+  await fs.writeFile(jsonFilePath, JSON.stringify(versions, null, 2));
   await fs.writeFile(
     bzlFilePath,
     generateVersionsBzlFile(
