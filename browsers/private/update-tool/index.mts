@@ -14,10 +14,12 @@ import {downloadAndHashBinariesForBrowser} from './download.mjs';
 import {
   generateRepoInfo,
   generateVersionsBzlFile,
+  sortVersions,
   Versions,
 } from './generation.mjs';
 import fs from 'node:fs/promises';
 import {getChromeMilestones, getFirefoxMilestones} from './versions.mjs';
+import {exec} from 'node:child_process';
 
 main().catch((e) => {
   console.error(e);
@@ -107,6 +109,10 @@ async function downloadMilestonesAndWriteVersionsFiles({
     versions[version] = repoInfo;
   }
 
+  // Sort versions since old versions will keep getting added after newer ones
+  // are already out.
+  versions = sortVersions(versions);
+
   const allVersions = [...Object.keys(versions)];
   const defaultVersion = allVersions[allVersions.length - 1];
 
@@ -121,6 +127,14 @@ async function downloadMilestonesAndWriteVersionsFiles({
       versions,
     ),
   );
+
+  // Format the resulting `.bzl` file. JSON is valid here, but it's not
+  // formatted quite right (e.g. no trailing comma).
+  exec(`buildifier ${bzlFilePath}`, (err) => {
+    if (err) {
+      console.warn(`Formatting of ${bzlFilePath} failed: ${err.message}`);
+    }
+  });
 }
 
 async function main() {
