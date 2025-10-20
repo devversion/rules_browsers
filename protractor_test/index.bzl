@@ -16,8 +16,8 @@ def protractor_test(name, server, deps, extra_config = {}, data = [], enable_per
             ":%s_protractor_extra_config" % name,
             "@rules_browsers//browsers/chromium",
             "@rules_browsers//protractor_test:config",
-            "//:node_modules/protractor",
-            "//:node_modules/tinyglobby",
+            Label("//:node_modules/protractor"),
+            Label("//:node_modules/tinyglobby"),
         ],
         env = {
             "ENABLE_PERF_LOGGING": "1" if enable_perf_logging else "0",
