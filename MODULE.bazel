@@ -5,7 +5,7 @@ module(
     version = "0.3.0",
 )
 
-# Load default browser versions used by targets in `//browers` for direct consumption. Test rules
+# Load default browser versions used by targets in `//browsers` for direct consumption. Test rules
 # provided from the module use these repositories transitively. The root module depending on
 # `rules_browsers` can override the version used in its `MODULE.bazel` file.
 browsers = use_extension("//browsers:extensions.bzl", "browsers")
