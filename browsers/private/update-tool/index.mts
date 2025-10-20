@@ -128,10 +128,22 @@ async function downloadMilestonesAndWriteVersionsFiles({
     ),
   );
 
+  // Format the resulting `.json` file. Prettier may apply some formatting that
+  // isn't consistent with default stringification (e.g. line length).
+  exec(`npx prettier --write ${jsonFilePath}`, (err, stdout, stderr) => {
+    if (err) {
+      console.log(stdout);
+      console.log(stderr);
+      console.warn(`Formatting of ${jsonFilePath} failed: ${err.message}`);
+    }
+  });
+
   // Format the resulting `.bzl` file. JSON is valid here, but it's not
   // formatted quite right (e.g. no trailing comma).
-  exec(`buildifier ${bzlFilePath}`, (err) => {
+  exec(`buildifier ${bzlFilePath}`, (err, stdout, stderr) => {
     if (err) {
+      console.log(stdout);
+      console.log(stderr);
       console.warn(`Formatting of ${bzlFilePath} failed: ${err.message}`);
     }
   });
