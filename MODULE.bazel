@@ -5,7 +5,9 @@ module(
     version = "0.3.0",
 )
 
-# Load browsers for tests.
+# Load default browser versions used by targets in `//browsers` for direct consumption. Test rules
+# provided from the module use these repositories transitively. The root module depending on
+# `rules_browsers` can override the version used in its `MODULE.bazel` file.
 browsers = use_extension("//browsers:extensions.bzl", "browsers")
 browsers.chrome()
 browsers.chromedriver()
@@ -28,16 +30,16 @@ use_repo(
 
 # Miscellaneous dependencies.
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "bazel_skylib", version = "1.8.1")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
 
 # Manually specify a recent Node.js version.
-bazel_dep(name = "rules_nodejs", version = "6.5.0")
+bazel_dep(name = "rules_nodejs", version = "6.5.2")
 
 node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
 node.toolchain(node_version = "22.18.0")
 
 # JS
-bazel_dep(name = "aspect_rules_js", version = "2.4.2")
+bazel_dep(name = "aspect_rules_js", version = "2.6.2")
 
 npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
 npm.npm_translate_lock(
@@ -53,7 +55,7 @@ npm.npm_translate_lock(
 use_repo(npm, "npm_rules_browsers")
 
 # TS
-bazel_dep(name = "aspect_rules_ts", version = "3.6.3")
+bazel_dep(name = "aspect_rules_ts", version = "3.7.0")
 
 rules_ts_ext = use_extension("@aspect_rules_ts//ts:extensions.bzl", "ext")
 rules_ts_ext.deps(

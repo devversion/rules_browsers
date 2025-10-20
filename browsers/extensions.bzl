@@ -7,45 +7,69 @@ load("//browsers/private/versions:chromedriver.bzl", CHROMEDRIVER_DEFAULT_VERSIO
 load("//browsers/private/versions:chromium.bzl", CHROMIUM_DEFAULT_VERSION = "DEFAULT_VERSION")
 load("//browsers/private/versions:firefox.bzl", FIREFOX_DEFAULT_VERSION = "DEFAULT_VERSION")
 
-def _resolve_latest_version(name, versions):
-    if len(versions) == 1:
-        return versions.pop()
+def _find_version_providing_modules(module_ctx):
+    """Finds the modules eligible for providing versions.
 
-    use_version = sorted(versions, reverse = True)[0]
+    Finds the root and `rules_browsers` (i.e. this) modules on the module graph. Versions may only
+    be specified by the root module. If the root module does not specify versions, we always fall
+    back to the default versions used in this module.
 
-    # buildifier: disable=print
-    print("NOTE: browser {} has multiple versions {}. Decided to use: {}".format(name, versions, use_version))
+    Args:
+      module_ctx: The module context from the module_extension implementation.
 
-    # This is not SemVer aware and might sort incorrectly. If multiple versions end up on the graph,
-    # this will at the very least be deterministic across runs though.
-    return use_version
+    Returns:
+      The modules to use for version lookup in order of precedence.
+      Fails if this module (`rules_browsers`) cannot be found.
+    """
+    root = None
+    this_module = None
+    for mod in module_ctx.modules:
+        if mod.is_root:
+            root = mod
+        if mod.name == "rules_browsers":
+            this_module = mod
+    if root == None:
+        root = this_module
+    if this_module == None:
+        fail("could not find `rules_browsers` module")
+    return [root, this_module]
 
-def _browsers_impl(ctx):
-    chrome_versions = []
-    chromedriver_versions = []
-    firefox_versions = []
+def _get_single_version(candidate_modules, version_tag_name):
+    """Retrieves the single version specified on a tag in the candidate modules.
 
-    for mod in ctx.modules:
-        for tag in mod.tags.chrome:
-            if tag.version not in chrome_versions:
-                chrome_versions.append(tag.version)
+    Checks all candidate modules for the specified tag in order. Returns the "version" attribute
+    from the first matching module. Fails if a module provides the desired tag more than once.
 
-        for tag in mod.tags.chromedriver:
-            if tag.version not in chromedriver_versions:
-                chromedriver_versions.append(tag.version)
+    Args:
+      candidate_modules: Modules that will be checked for the version_tag_name in order.
+      version_tag_name: Name of the tag to find. The tag must have a `version` attribute.
 
-        for tag in mod.tags.firefox:
-            if tag.version not in firefox_versions:
-                firefox_versions.append(tag.version)
+    Returns:
+      The version from the first candidate module providing the tag. None if no candidate module
+      provides the tag.
+    """
+    for mod in candidate_modules:
+        version_tag = getattr(mod.tags, version_tag_name)
+        if len(version_tag) == 1:
+            return version_tag[0].version
+        elif len(version_tag) > 1:
+            fail("module %s provided %d versions for %s, only one is allowed" % (mod.name, len(version_tag), version_tag_name))
+    return None
 
-    if len(chrome_versions) > 0:
-        define_chrome_repositories(_resolve_latest_version("Chrome", chrome_versions))
+def _browsers_impl(module_ctx):
+    version_providing_modules = _find_version_providing_modules(module_ctx)
 
-    if len(chromedriver_versions) > 0:
-        define_chromedriver_repositories(_resolve_latest_version("Chromedriver", chromedriver_versions))
+    chrome_version = _get_single_version(version_providing_modules, "chrome")
+    if chrome_version:
+        define_chrome_repositories(chrome_version)
 
-    if len(firefox_versions) > 0:
-        define_firefox_repositories(_resolve_latest_version("Firefox", firefox_versions))
+    chromedriver_version = _get_single_version(version_providing_modules, "chromedriver")
+    if chromedriver_version:
+        define_chromedriver_repositories(chromedriver_version)
+
+    firefox_version = _get_single_version(version_providing_modules, "firefox")
+    if firefox_version:
+        define_firefox_repositories(firefox_version)
 
 browsers = module_extension(
     implementation = _browsers_impl,
