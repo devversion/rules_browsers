@@ -20,6 +20,11 @@ const virtual = fromRollup(rollupVirtual);
 /** @type {import("@web/test-runner").TestRunnerConfig} */
 export default {
   ...jasmineTestRunnerConfig(),
+  testFramework: {
+    config: {
+      seed: process.env.JASMINE_RANDOM_SEED || String(Math.random()).slice(-5),
+    },
+  },
   watch: false,
   testsFinishTimeout: 1000 * 60 * 5, // 5 minutes
   browserStartTimeout: 1000 * 60 * 1, // 1 minute
