@@ -21,10 +21,12 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         browser_deps.append("@rules_browsers//browsers/firefox")
         toolchains.append("@rules_browsers//browsers/firefox:toolchain_alias")
         env = {"FIREFOX_BIN": "$(FIREFOX)"}
+        extra_tags.append("firefox")
     elif is_chromium:
         browser_deps.append("@rules_browsers//browsers/chromium")
         toolchains.append("@rules_browsers//browsers/chromium:toolchain_alias")
         env = {"CHROME_HEADLESS_BIN": "$(CHROME-HEADLESS-SHELL)"}
+        extra_tags.append("chromium")
     else:
         env = {"MANUAL_MODE": "1"}
         extra_tags += ["requires-network", "manual"]
