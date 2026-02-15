@@ -2,7 +2,7 @@
 
 module(
     name = "rules_browsers",
-    version = "0.3.0",
+    version = "0.4.0",
 )
 
 # Load default browser versions used by targets in `//browsers` for direct consumption. Test rules
